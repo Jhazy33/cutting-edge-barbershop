@@ -1,0 +1,14 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/cms/*"
+  to = "http://109.199.118.38:3000/cms/:splat"
+  status = 200
+  force = true
