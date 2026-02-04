@@ -16,6 +16,13 @@ const App: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Hide loading overlay when React app mounts
+    const loadingOverlay = document.getElementById('loading-overlay');
+    if (loadingOverlay) {
+      loadingOverlay.classList.add('hidden');
+      console.log('Loading overlay hidden by React');
+    }
+
     if (scrollRef.current) {
       ScrollTrigger.defaults({
         scroller: scrollRef.current

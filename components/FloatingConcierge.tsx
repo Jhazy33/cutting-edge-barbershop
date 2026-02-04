@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { SQUIRE_LINK, IMAGES } from '../constants';
+// Realtime subscription removed - Supabase client has realtime disabled
+// to prevent WebSocket security errors on HTTPS pages
 
 const FloatingConcierge: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null);
 
   return (
     <>
@@ -45,6 +48,15 @@ const FloatingConcierge: React.FC = () => {
       </div>
 
       {/* Modal Overlay */}
+      {notification && (
+        <div className="fixed top-24 right-8 z-[60] animate-fadeIn">
+          <div className="bg-black/80 backdrop-blur-md border border-primary/50 text-white px-6 py-3 rounded-full shadow-[0_0_30px_rgba(204,0,0,0.4)] flex items-center space-x-3">
+            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <span className="font-display uppercase tracking-widest text-xs font-bold">{notification}</span>
+          </div>
+        </div>
+      )}
+
       {isOpen && (
         <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
           <div className="bg-[#0A0A0A]/90 backdrop-blur-2xl border border-white/10 w-full max-w-lg rounded-3xl p-8 md:p-12 relative shadow-[0_0_100px_rgba(0,0,0,0.8)] animate-scaleIn overflow-hidden group">
@@ -75,7 +87,7 @@ const FloatingConcierge: React.FC = () => {
             <div className="space-y-4 relative z-10">
               {/* Voice Mode */}
               <a
-                href="https://voice.cihconsultingllc.com"
+                href="https://voice-ce.cihconsultingllc.com"
                 rel="noreferrer"
                 className="block group/item relative overflow-hidden rounded-2xl bg-white/[0.03] border border-white/5 hover:border-primary/40 hover:bg-white/[0.06] transition-all duration-500 p-6 md:p-8"
               >
@@ -97,7 +109,7 @@ const FloatingConcierge: React.FC = () => {
 
               {/* Chat Mode */}
               <a
-                href="https://chat.cihconsultingllc.com"
+                href="https://chat-ce.cihconsultingllc.com"
                 rel="noreferrer"
                 className="block group/item relative overflow-hidden rounded-2xl bg-white/[0.03] border border-white/5 hover:border-primary/40 hover:bg-white/[0.06] transition-all duration-500 p-6 md:p-8"
               >

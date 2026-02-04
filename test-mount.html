@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="module" crossorigin src="./dist/assets/index-CW0NifX6.js"></script>
+</head>
+<body>
+  <div id="root">
+    <div id="loading-overlay" style="background: red; padding: 20px;">
+      LOADING OVERLAY - Should disappear
+    </div>
+  </div>
+  <style>
+    .hidden { display: none !important; }
+  </style>
+  <script>
+    setTimeout(() => {
+      const overlay = document.getElementById('loading-overlay');
+      const root = document.getElementById('root');
+      console.log('After 2 seconds:');
+      console.log('- Overlay exists:', !!overlay);
+      console.log('- Overlay classes:', overlay?.className);
+      console.log('- Overlay hidden:', overlay?.classList.contains('hidden'));
+      console.log('- Root children:', root?.children.length);
+      console.log('- Window mounted:', window.__REACT_MOUNTED__);
+    }, 2000);
+  </script>
+</body>
+</html>
