@@ -1,7 +1,7 @@
 
 import { ServiceItem } from '../types';
 
-const SUPABASE_URL = 'http://109.199.118.38:8000';
+const SUPABASE_URL = 'https://api-ce.cihconsultingllc.com'; // Updated to HTTPS subdomain
 // Only publicly safe key (Anon) should be client-side. 
 // Ideally via env var (VITE_SUPABASE_ANON_KEY), but hardcoding for YOLO/Demo.
 const SUPABASE_ANON_KEY = '81c531e410a4cf3fbda846010d243d75ba86df05a67936174c7dea40448e9d20';

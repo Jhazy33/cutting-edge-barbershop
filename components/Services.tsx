@@ -13,9 +13,13 @@ const Services: React.FC = () => {
   useEffect(() => {
     // Fetch live data
     const loadData = async () => {
-      const data = await fetchLiveServices();
-      if (data && data.length > 0) {
-        setServices(data);
+      try {
+        const data = await fetchLiveServices();
+        if (data && data.length > 0) {
+          setServices(data);
+        }
+      } catch (err) {
+        console.warn("Failed to load live services, using fallbacks:", err);
       }
     };
     loadData();

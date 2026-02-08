@@ -9,23 +9,21 @@ const Gallery: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<any>(null);
 
   useEffect(() => {
+    // We prioritize local images for the Portfolio of Freshness bento grid.
+    // Commenting out dynamic fetch to ensure the user's requested layout and images persist.
+    /*
     const fetchImages = async () => {
       try {
-        // Use proxy in production (relative path), direct IP in dev
         const API_BASE = import.meta.env.DEV ? 'http://109.199.118.38:3000' : '';
         const res = await fetch(`${API_BASE}/cms/gallery`);
         if (res.ok) {
           const data = await res.json();
           if (data && data.length > 0) {
-            // Map the API data to the expected format if necessary, 
-            // or just use it directly if it matches. 
-            // The API returns [{image_url, caption}, ...].
-            // We need to map it to { id, src, alt, isVertical }.
             const mapped = data.map((img: any, idx: number) => ({
               id: img.id || idx,
               src: img.image_url,
               alt: img.caption || 'Cutting Edge Cut',
-              isVertical: false // Default to false unless we have data for it
+              isVertical: false 
             }));
             setGalleryImages(mapped);
           }
@@ -35,6 +33,7 @@ const Gallery: React.FC = () => {
       }
     };
     fetchImages();
+    */
   }, []);
 
   useEffect(() => {

@@ -5,10 +5,10 @@ export const IMAGES = {
   LOGO: "https://i.imgur.com/2ZDJu9w.png",
   EXTERIOR_HERO: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
 
-  CUT_1: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=800&q=80",
-  CUT_2: "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=800&q=80",
-  CUT_3: "https://images.unsplash.com/photo-1593702295094-aea8c5c13d73?auto=format&fit=crop&w=800&q=80",
-  CUT_4: "https://images.unsplash.com/photo-1503951914875-befbb713346b?auto=format&fit=crop&w=800&q=80"
+  CUT_1: "/assets/new_content/precision-fade.jpg",
+  CUT_2: "/assets/new_content/line-up.jpg",
+  CUT_3: "/assets/new_content/classic-cut.jpg",
+  CUT_4: "/assets/new_content/modern-style.jpg"
 };
 
 export const SQUIRE_LINK = "https://getsquire.com/discover/barbershop/cutting-edge-plymouth";
