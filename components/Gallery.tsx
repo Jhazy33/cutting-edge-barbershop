@@ -1,30 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import React, { useState } from 'react';
 import { GALLERY_ITEMS } from '../constants';
 
 const Gallery: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [galleryImages, setGalleryImages] = useState(GALLERY_ITEMS);
+  const [galleryImages] = useState(GALLERY_ITEMS);
   const [selectedImage, setSelectedImage] = useState<any>(null);
-
-  useEffect(() => {
-    // Animation context - re-run when content is ready
-    const ctx = gsap.context(() => {
-      gsap.from(".gallery-item", {
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 85%",
-          toggleActions: "play none none none"
-        },
-        scale: 0.95,
-        opacity: 0,
-        stagger: 0.05,
-        duration: 0.6,
-        ease: "power2.out"
-      });
-    }, containerRef);
-    return () => ctx.revert();
-  }, [galleryImages]);
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = `https://picsum.photos/600/600?random=${Math.random()}`;
@@ -32,7 +11,7 @@ const Gallery: React.FC = () => {
 
   return (
     <section id="gallery" className="py-24 px-6 bg-[#111] border-t border-white/5">
-      <div ref={containerRef} className="max-w-screen-xl mx-auto">
+      <div className="max-w-screen-xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-white/10 pb-8">
           <h2 className="font-display text-4xl md:text-5xl text-white uppercase border-l-4 border-primary pl-6 tracking-widest leading-none">
             Portfolio <br /> of Freshness

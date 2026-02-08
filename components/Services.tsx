@@ -1,11 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
+import React, { useEffect, useState } from 'react';
 import { SERVICES as FALLBACK_SERVICES } from '../constants';
 import { fetchLiveServices } from '../services/supabaseService';
 import { ServiceItem } from '../types';
 
 const Services: React.FC = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
   const [services, setServices] = useState<ServiceItem[]>(FALLBACK_SERVICES);
 
   useEffect(() => {
@@ -22,27 +20,8 @@ const Services: React.FC = () => {
     loadData();
   }, []);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".service-card", {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 85%",
-          toggleActions: "play none none none"
-        },
-        y: 40,
-        opacity: 0,
-        stagger: 0.1,
-        duration: 0.6,
-        ease: "power2.out"
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, [services]);
-
   return (
-    <section id="services" ref={sectionRef} className="py-24 px-6 bg-background-dark text-white border-t border-white/5 relative">
+    <section id="services" className="py-24 px-6 bg-background-dark text-white border-t border-white/5 relative">
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
       <div className="max-w-screen-xl mx-auto relative z-10">
         <div className="text-center mb-16">
