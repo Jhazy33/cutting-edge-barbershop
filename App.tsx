@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -6,27 +6,23 @@ import Gallery from './components/Gallery';
 import Footer from './components/Footer';
 import FloatingConcierge from './components/FloatingConcierge';
 import { IMAGES } from './constants';
-
-import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const App: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Hide loading overlay when React app mounts
+    // Hide loading overlay
     const loadingOverlay = document.getElementById('loading-overlay');
-    if (loadingOverlay) {
-      loadingOverlay.classList.add('hidden');
-      console.log('Loading overlay hidden by React');
-    }
+    if (loadingOverlay) loadingOverlay.classList.add('hidden');
 
     if (scrollRef.current) {
+      ScrollTrigger.config({ limitCallbacks: true });
       ScrollTrigger.defaults({
         scroller: scrollRef.current
       });
+      // Refresh to ensure all triggers acknowledge the scroller
+      ScrollTrigger.refresh();
       scrollRef.current.scrollTo(0, 0);
     }
 
@@ -55,7 +51,7 @@ const App: React.FC = () => {
     <div className="h-screen w-full bg-[#0A0A0A] text-white selection:bg-primary selection:text-white font-sans overflow-hidden relative">
       <Navbar />
 
-      {/* PERSISTENT BACKGROUND LAYER (Persistent even when content vanishes) */}
+      {/* PERSISTENT BACKGROUND LAYER */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/40 to-transparent z-10"></div>
         <img
@@ -70,8 +66,6 @@ const App: React.FC = () => {
         ref={scrollRef}
         className="fixed inset-0 z-10 overflow-y-auto scroll-smooth no-scrollbar"
         style={{
-          // Custom mask: Content is invisible at the top (under logo) and fades in or cuts off.
-          // Mobile: ~240px, Desktop: ~400px
           maskImage: 'linear-gradient(to bottom, transparent 0, transparent var(--mask-h, 240px), black var(--mask-h, 240px))',
           WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, transparent var(--mask-h, 240px), black var(--mask-h, 240px))'
         }}
