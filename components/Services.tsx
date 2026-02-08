@@ -21,7 +21,7 @@ const Services: React.FC = () => {
   }, []);
 
   return (
-    <section id="services" className="py-24 px-6 bg-background-dark text-white border-t border-white/5 relative">
+    <section id="services" className="pt-32 pb-24 px-6 bg-background-dark text-white border-t border-white/5 relative">
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
       <div className="max-w-screen-xl mx-auto relative z-10">
         <div className="text-center mb-16">
