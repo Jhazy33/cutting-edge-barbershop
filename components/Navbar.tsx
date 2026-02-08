@@ -4,7 +4,7 @@ import { SQUIRE_LINK, IMAGES } from '../constants';
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const navClass = `fixed top-0 w-full z-50 py-6 md:py-10 transition-colors duration-500 bg-transparent`;
+  const navClass = `fixed top-0 w-full z-50 py-6 md:py-10 transition-colors duration-500 bg-gradient-to-b from-black/80 to-black/40 backdrop-blur-sm`;
 
   return (
     <nav className={navClass}>
