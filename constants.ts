@@ -1,8 +1,8 @@
 import { GalleryImage, ServiceItem } from "./types";
 
-// Local images for production deployment
+// Using Unsplash placeholders to replace broken Facebook CDN links
 export const IMAGES = {
-  LOGO: "/logo.png",
+  LOGO: "https://i.imgur.com/2ZDJu9w.png",
   EXTERIOR_HERO: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
 
   CUT_1: "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=800&q=80",
