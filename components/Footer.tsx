@@ -4,7 +4,7 @@ import { SQUIRE_LINK, IMAGES } from '../constants';
 const Footer: React.FC = () => {
   return (
     // Reduced padding (pt-16 pb-8) and reduced border width to make it cleaner
-    <footer id="contact" className="bg-black text-white pt-16 pb-8 px-6 border-t-2 border-primary">
+    <footer id="contact" className="bg-black text-white pt-16 pb-8 px-6 border-t-2 border-primary" style={{ scrollMarginTop: '400px' }}>
       <div className="max-w-screen-xl mx-auto">
         <div className="grid md:grid-cols-3 gap-16 mb-12">
           {/* Brand */}
