@@ -1,3 +1,4 @@
+5eed527 fix: restore bento grid and services visibility via scroller sync
 7ad982a fix: explicit vercel build config and robust component fallbacks
 6f42348 fix: restore services fallback and fix portfolio bento images
 caa94ea feat: implement portfolio bento grid with fresh images
