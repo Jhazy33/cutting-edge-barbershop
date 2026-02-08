@@ -22,14 +22,14 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex space-x-8 text-sm font-bold uppercase tracking-widest text-white items-center">
+        <div className="hidden md:flex space-x-8 text-sm font-bold uppercase tracking-widest text-white items-center relative z-10">
           <a href="#services" className="hover:text-primary transition-colors hover:underline decoration-primary underline-offset-4">Services</a>
           <a href="#gallery" className="hover:text-primary transition-colors hover:underline decoration-primary underline-offset-4">Gallery</a>
           <a href="#contact" className="hover:text-primary transition-colors hover:underline decoration-primary underline-offset-4">Visit</a>
         </div>
 
         {/* CTA */}
-        <div className="hidden md:block">
+        <div className="hidden md:block relative z-10">
           <a
             href={SQUIRE_LINK}
             target="_blank"
