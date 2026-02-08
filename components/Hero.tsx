@@ -35,7 +35,7 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <header ref={containerRef} className="relative pt-64 md:pt-[500px] pb-32 min-h-screen flex flex-col justify-center">
+    <header ref={containerRef} className="relative pt-24 md:pt-32 pb-8 flex flex-col">
       {/* Background is now global in App.tsx */}
 
       <div className="relative z-10 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
