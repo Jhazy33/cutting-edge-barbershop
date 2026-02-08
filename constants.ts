@@ -7,8 +7,9 @@ export const IMAGES = {
 
   CUT_1: "/assets/new_content/precision-fade.jpg",
   CUT_2: "/assets/new_content/line-up.jpg",
-  CUT_3: "/assets/new_content/classic-cut.jpg",
-  CUT_4: "/assets/new_content/modern-style.jpg"
+  CUT_3: "/assets/new_content/hair-design.jpg",
+  CUT_4: "/assets/new_content/barber-work.jpg"
+
 };
 
 export const SQUIRE_LINK = "https://getsquire.com/discover/barbershop/cutting-edge-plymouth";
@@ -75,6 +76,6 @@ export const SERVICES: ServiceItem[] = [
 export const GALLERY_ITEMS: GalleryImage[] = [
   { id: 1, src: IMAGES.CUT_1, alt: "Precision Fade" },
   { id: 2, src: IMAGES.CUT_2, alt: "Line Up", isVertical: true },
-  { id: 3, src: IMAGES.CUT_3, alt: "Classic Cut" },
-  { id: 4, src: IMAGES.CUT_4, alt: "Modern Style" },
+  { id: 3, src: IMAGES.CUT_3, alt: "Hair Design" },
+  { id: 4, src: IMAGES.CUT_4, alt: "Barber at Work" },
 ];
