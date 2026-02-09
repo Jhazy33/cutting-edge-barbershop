@@ -76,8 +76,8 @@ const App: React.FC = () => {
       >
         <style dangerouslySetInnerHTML={{
           __html: `
-          :root { --mask-h: 180px; }
-          @media (min-width: 768px) { :root { --mask-h: 280px; } }
+          :root { --mask-h: 120px; }
+          @media (min-width: 768px) { :root { --mask-h: 160px; } }
         `}} />
 
         <main>

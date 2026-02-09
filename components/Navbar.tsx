@@ -4,7 +4,7 @@ import { SQUIRE_LINK, IMAGES } from '../constants';
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const navClass = `fixed top-0 w-full z-50 py-6 md:py-10 transition-colors duration-500 bg-transparent`;
+  const navClass = `fixed top-0 w-full z-50 pt-0 pb-2 md:pt-2 md:pb-4 transition-colors duration-500 bg-transparent`;
 
   return (
     <nav className={navClass}>
@@ -16,13 +16,13 @@ const Navbar: React.FC = () => {
               src={IMAGES.LOGO}
               alt="Cutting Edge Barbershop"
               // Permanent large size: h-48 (mobile) md:h-80 (desktop)
-              className="h-48 md:h-80 brightness-0 invert w-auto object-contain drop-shadow-2xl"
+              className="h-32 md:h-48 brightness-0 invert w-auto object-contain drop-shadow-2xl scale-110"
             />
           </div>
         </div>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex space-x-8 text-sm font-bold uppercase tracking-widest text-white items-center">
+        <div className="hidden md:flex justify-center items-center gap-12 text-base font-bold uppercase tracking-wide text-white">
           <a href="#services" className="hover:text-primary transition-colors hover:underline decoration-primary underline-offset-4">Services</a>
           <a href="#gallery" className="hover:text-primary transition-colors hover:underline decoration-primary underline-offset-4">Gallery</a>
           <a href="#contact" className="hover:text-primary transition-colors hover:underline decoration-primary underline-offset-4">Visit</a>
@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
             href={SQUIRE_LINK}
             target="_blank"
             rel="noreferrer"
-            className="bg-primary text-white px-6 py-2 text-sm font-bold uppercase tracking-widest hover:bg-red-700 transition-all hover:shadow-[0_0_15px_rgba(204,0,0,0.6)]"
+            className="bg-primary text-white px-8 py-3 text-base font-bold uppercase tracking-wide hover:bg-red-700 transition-all hover:shadow-[0_0_15px_rgba(204,0,0,0.6)]"
           >
             Book Now
           </a>

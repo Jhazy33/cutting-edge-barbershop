@@ -35,15 +35,15 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <header ref={containerRef} className="relative pt-24 md:pt-32 pb-64 flex flex-col">
+    <header ref={containerRef} className="relative pt-40 md:pt-64 pb-64 flex flex-col">
       {/* Background is now global in App.tsx */}
 
-      <div className="relative z-10 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <div className="relative z-10 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-start">
         <div ref={textRef}>
           <div className="inline-block px-3 py-1 mb-6 border border-primary text-primary text-xs font-bold tracking-widest uppercase">
             Est. 2012 • Manomet Point, MA
           </div>
-          <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-white font-bold leading-[0.85] uppercase mb-8 tracking-tighter drop-shadow-xl">
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-white font-bold leading-[0.85] uppercase mb-8 tracking-tighter drop-shadow-xl">
             Unmatched <br />
             <span className="text-primary italic pr-2">Attention</span> <br />
             to Detail
