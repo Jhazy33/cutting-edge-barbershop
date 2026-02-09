@@ -7,9 +7,12 @@
  * - Retry logic for Ollama API calls
  * - Comprehensive input validation
  * - Knowledge base search with shop isolation
+ * - Performance optimization with caching and monitoring
  */
 
 import { query } from '../utils/db';
+import { getCachedEmbedding, setCachedEmbedding } from './embeddingCache';
+import { recordPerformance } from './performanceMonitor';
 
 // ============================================================================
 // CONFIGURATION
@@ -95,61 +98,162 @@ export async function generateEmbedding(text: string): Promise<number[]> {
   // Input validation
   validateText(text, 'text');
 
-  let lastError: Error | null = null;
+  const startTime = Date.now();
+  let success = false;
 
-  // Retry loop with exponential backoff
-  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-    try {
-      const response = await fetch(`${OLLAMA_URL}/api/embeddings`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: EMBED_MODEL,
-          prompt: text.trim(),
-        }),
-      });
+  try {
+    // Check cache first
+    const cached = getCachedEmbedding(text);
+    if (cached) {
+      console.log('✅ Cache hit for embedding');
+      recordPerformance('embedding_generation_cache_hit', Date.now() - startTime, true);
+      return cached;
+    }
 
-      if (!response.ok) {
-        throw new Error(
-          `Ollama API error: ${response.status} ${response.statusText}`
+    let lastError: Error | null = null;
+
+    // Retry loop with exponential backoff
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+      try {
+        const response = await fetch(`${OLLAMA_URL}/api/embeddings`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(process.env.OLLAMA_API_KEY && { 'X-Ollama-Key': process.env.OLLAMA_API_KEY }),
+          },
+          body: JSON.stringify({
+            model: EMBED_MODEL,
+            prompt: text.trim(),
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `Ollama API error: ${response.status} ${response.statusText}`
+          );
+        }
+
+        const data = (await response.json()) as EmbeddingResult;
+
+        // Validate embedding dimensions
+        if (!data.embedding || !Array.isArray(data.embedding)) {
+          throw new Error('Invalid response: embedding is missing or not an array');
+        }
+
+        if (data.embedding.length !== EMBEDDING_DIMENSIONS) {
+          throw new Error(
+            `Invalid embedding dimensions: expected ${EMBEDDING_DIMENSIONS}, got ${data.embedding.length}`
+          );
+        }
+
+        success = true;
+        const embedding = data.embedding;
+
+        // Store in cache
+        setCachedEmbedding(text, embedding);
+
+        // Record performance
+        recordPerformance('embedding_generation', Date.now() - startTime, true);
+
+        return embedding;
+      } catch (error) {
+        lastError = error as Error;
+        console.error(
+          `Embedding generation attempt ${attempt + 1}/${MAX_RETRIES} failed:`,
+          error
         );
-      }
 
-      const data = (await response.json()) as EmbeddingResult;
-
-      // Validate embedding dimensions
-      if (!data.embedding || !Array.isArray(data.embedding)) {
-        throw new Error('Invalid response: embedding is missing or not an array');
-      }
-
-      if (data.embedding.length !== EMBEDDING_DIMENSIONS) {
-        throw new Error(
-          `Invalid embedding dimensions: expected ${EMBEDDING_DIMENSIONS}, got ${data.embedding.length}`
-        );
-      }
-
-      return data.embedding;
-    } catch (error) {
-      lastError = error as Error;
-      console.error(
-        `Embedding generation attempt ${attempt + 1}/${MAX_RETRIES} failed:`,
-        error
-      );
-
-      // Exponential backoff: 1s, 2s, 4s
-      if (attempt < MAX_RETRIES - 1) {
-        const delay = 1000 * Math.pow(2, attempt);
-        await new Promise((resolve) => setTimeout(resolve, delay));
+        // Exponential backoff: 1s, 2s, 4s
+        if (attempt < MAX_RETRIES - 1) {
+          const delay = 1000 * Math.pow(2, attempt);
+          await new Promise((resolve) => setTimeout(resolve, delay));
+        }
       }
     }
+
+    // All retries exhausted
+    throw new Error(
+      `Failed to generate embedding after ${MAX_RETRIES} attempts: ${lastError?.message}`
+    );
+  } catch (error) {
+    recordPerformance('embedding_generation', Date.now() - startTime, false);
+    throw error;
+  }
+}
+
+// ============================================================================
+// BATCH EMBEDDING GENERATION
+// ============================================================================
+
+/**
+ * Generate embeddings for multiple texts in batch
+ *
+ * More efficient than individual calls for processing multiple texts.
+ * Uses rate limiting to avoid overwhelming the Ollama API.
+ *
+ * @param texts - Array of texts to embed
+ * @returns Promise<number[][]> - Array of embedding vectors
+ * @throws Error if validation fails
+ *
+ * @example
+ * ```typescript
+ * const embeddings = await generateBatchEmbeddings([
+ *   'First text',
+ *   'Second text',
+ *   'Third text'
+ * ]);
+ * // Returns: [[0.1, 0.2, ...], [0.3, 0.4, ...], [0.5, 0.6, ...]]
+ * ```
+ */
+export async function generateBatchEmbeddings(texts: string[]): Promise<number[][]> {
+  // Input validation
+  if (!texts || !Array.isArray(texts)) {
+    throw new Error('Invalid input: texts must be an array');
   }
 
-  // All retries exhausted
-  throw new Error(
-    `Failed to generate embedding after ${MAX_RETRIES} attempts: ${lastError?.message}`
-  );
+  if (texts.length === 0) {
+    throw new Error('Invalid input: texts array is empty');
+  }
+
+  if (texts.length > 50) {
+    throw new Error('Invalid input: maximum 50 texts per batch');
+  }
+
+  // Validate each text
+  texts.forEach((text, index) => {
+    validateText(text, `texts[${index}]`);
+  });
+
+  const startTime = Date.now();
+  let success = false;
+
+  try {
+    // Generate embeddings in parallel with rate limiting
+    // Process 5 at a time to avoid overwhelming Ollama
+    const batchSize = 5;
+    const embeddings: number[][] = [];
+
+    for (let i = 0; i < texts.length; i += batchSize) {
+      const batch = texts.slice(i, i + batchSize);
+      const batchEmbeddings = await Promise.all(
+        batch.map((text) => generateEmbedding(text))
+      );
+      embeddings.push(...batchEmbeddings);
+    }
+
+    success = true;
+
+    // Record performance
+    recordPerformance('batch_embedding_generation', Date.now() - startTime, true, {
+      batchSize: texts.length,
+      avgPerEmbedding: (Date.now() - startTime) / texts.length,
+    });
+
+    return embeddings;
+  } catch (error) {
+    recordPerformance('batch_embedding_generation', Date.now() - startTime, false);
+    throw error;
+  }
 }
 
 // ============================================================================
@@ -256,39 +360,54 @@ export async function searchKnowledgeBaseOptimized(
   category?: string,
   threshold: number = 0.0
 ): Promise<KnowledgeBaseEntry[]> {
-  // Input validation
-  validateText(queryText, 'queryText', 3);
-  validateShopId(shopId);
-
-  if (limit < 1 || limit > 100) {
-    throw new Error('Invalid limit: must be between 1 and 100');
-  }
-
-  if (threshold < 0 || threshold > 1) {
-    throw new Error('Invalid threshold: must be between 0 and 1');
-  }
-
-  // Generate embedding for query
-  const embedding = await generateEmbedding(queryText);
-  const vectorStr = `[${embedding.join(',')}]`;
-
-  // Call the search_knowledge_base function (created in migration 008)
-  const sql = `
-    SELECT * FROM search_knowledge_base(
-      $1::integer,
-      $2::vector(768),
-      $3::integer,
-      $4::text,
-      $5::numeric
-    );
-  `;
-
-  const params = [shopId, vectorStr, limit, category || null, threshold];
+  const startTime = Date.now();
+  let success = false;
 
   try {
+    // Input validation
+    validateText(queryText, 'queryText', 3);
+    validateShopId(shopId);
+
+    if (limit < 1 || limit > 100) {
+      throw new Error('Invalid limit: must be between 1 and 100');
+    }
+
+    if (threshold < 0 || threshold > 1) {
+      throw new Error('Invalid threshold: must be between 0 and 1');
+    }
+
+    // Generate embedding for query
+    const embedding = await generateEmbedding(queryText);
+    const vectorStr = `[${embedding.join(',')}]`;
+
+    // Call the search_knowledge_base function (created in migration 008)
+    const sql = `
+      SELECT * FROM search_knowledge_base(
+        $1::integer,
+        $2::vector(768),
+        $3::integer,
+        $4::text,
+        $5::numeric
+      );
+    `;
+
+    const params = [shopId, vectorStr, limit, category || null, threshold];
+
     const result = await query<KnowledgeBaseEntry>(sql, params);
+    success = true;
+
+    // Record performance
+    recordPerformance('vector_search', Date.now() - startTime, true, {
+      shopId,
+      limit,
+      category,
+      threshold,
+      resultsCount: result.rows.length,
+    });
+
     return result.rows;
   } catch (error) {
+    recordPerformance('vector_search', Date.now() - startTime, false);
     console.error('Optimized knowledge base search failed:', error);
     throw new Error(`Search failed: ${(error as Error).message}`);
   }
@@ -576,6 +695,7 @@ export async function deleteKnowledge(id: string): Promise<boolean> {
 
 export default {
   generateEmbedding,
+  generateBatchEmbeddings,
   searchKnowledgeBase,
   searchKnowledgeBaseOptimized,
   storeConversation,
