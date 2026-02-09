@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['tests/**/*.test.ts'],
+    include: ['tests/**/*.test.ts', 'security/**/*.test.ts'],
     exclude: ['node_modules', 'dist'],
     css: false, // Disable CSS processing for backend API tests
     coverage: {
@@ -14,7 +14,7 @@ export default defineConfig({
       exclude: ['src/scripts/**', 'node_modules/**'],
     },
     setupFiles: ['./tests/setup.ts'],
-    testTimeout: 10000,
-    hookTimeout: 10000,
+    testTimeout: 30000, // Increased to 30s for DoS tests
+    hookTimeout: 30000,
   },
 });
