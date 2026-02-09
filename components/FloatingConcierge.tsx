@@ -73,11 +73,11 @@ const FloatingConcierge: React.FC = () => {
             </button>
 
             <div className="text-center mb-10 relative z-10">
-              <div className="w-24 h-24 bg-gradient-to-br from-primary to-red-900 mx-auto rounded-3xl flex items-center justify-center mb-6 shadow-[0_20px_40px_rgba(204,0,0,0.3)] animate-float">
+              <div className="w-44 h-44 bg-gradient-to-br from-primary to-red-900 mx-auto rounded-3xl flex items-center justify-center mb-6 shadow-[0_20px_40px_rgba(204,0,0,0.3)] animate-float">
                 <img
                   src={IMAGES.LOGO}
                   alt="Cutting Edge"
-                  className="w-16 h-16 object-contain brightness-0 invert"
+                  className="w-40 h-40 object-contain brightness-0 invert"
                 />
               </div>
               <h3 className="font-display text-4xl md:text-5xl text-white uppercase font-bold tracking-[0.1em] mb-3">Digital Concierge</h3>
