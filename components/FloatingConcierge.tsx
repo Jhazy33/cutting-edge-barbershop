@@ -59,7 +59,7 @@ const FloatingConcierge: React.FC = () => {
 
       {isOpen && (
         <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-[#0A0A0A]/90 backdrop-blur-2xl border border-white/10 w-full max-w-lg rounded-3xl p-8 md:p-12 relative shadow-[0_0_100px_rgba(0,0,0,0.8)] animate-scaleIn overflow-hidden group">
+          <div className="bg-[#0A0A0A]/90 backdrop-blur-2xl border border-white/10 w-full max-w-lg rounded-3xl p-7 md:p-10 relative shadow-[0_0_100px_rgba(0,0,0,0.8)] animate-scaleIn overflow-hidden group">
 
             {/* Background Accent Glow */}
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
