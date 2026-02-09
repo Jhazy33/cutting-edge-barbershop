@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
     <nav className={navClass}>
       <div className="max-w-screen-xl mx-auto px-6 flex items-center justify-between">
         {/* Logo Area */}
-        <div className="flex items-center space-x-2 group cursor-pointer">
+        <a href="/" className="flex items-center space-x-2 group cursor-pointer">
           <div className="transition-transform duration-300 group-hover:scale-105 origin-left">
             <img
               src={IMAGES.LOGO}
@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
               className="h-32 md:h-48 brightness-0 invert w-auto object-contain drop-shadow-2xl scale-110"
             />
           </div>
-        </div>
+        </a>
 
         {/* Desktop Links */}
         <div className="hidden md:flex justify-center items-center gap-12 text-base font-bold uppercase tracking-wide text-white">

@@ -10,7 +10,7 @@ const Gallery: React.FC = () => {
   };
 
   return (
-    <section id="gallery" className="py-24 px-6 bg-[#111] border-t border-white/5" style={{ scrollMarginTop: '352px' }}>
+    <section id="gallery" className="pt-0 pb-24 px-6 bg-[#111] border-t border-white/5" style={{ scrollMarginTop: '160px' }}>
       <div className="max-w-screen-xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-white/10 pb-8">
           <h2 className="font-display text-4xl md:text-5xl text-white uppercase border-l-4 border-primary pl-6 tracking-widest leading-none">
