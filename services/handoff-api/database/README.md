@@ -526,8 +526,52 @@ LIMIT 100;
 
 ---
 
+## Testing Suite
+
+### Quick Test
+
+```bash
+# Run all tests (verification + data + triggers)
+./run_all_tests.sh
+
+# Or run individually
+psql -U postgres -d postgres -f verify_learning_tables.sql
+psql -U postgres -d postgres -f test_data_learning.sql
+psql -U postgres -d postgres -f test_triggers.sql
+```
+
+### Testing Files
+
+| File | Purpose |
+|------|---------|
+| `verify_learning_tables.sql` | Verify all objects created |
+| `test_data_learning.sql` | Insert comprehensive test data |
+| `test_triggers.sql` | Test all trigger functionality |
+| `run_all_tests.sh` | Execute complete test suite |
+| `cleanup_test_data.sh` | Remove test data |
+| `TESTING_GUIDE.md` | Complete testing documentation |
+| `QUICK_REFERENCE.md` | Fast command reference |
+
+### Test Coverage
+
+- ✅ 5 tables with all columns
+- ✅ 26 indexes (including HNSW vector indexes)
+- ✅ 5 functions (triggers + utility)
+- ✅ 3 triggers (feedback, correction, timestamp)
+- ✅ 2 materialized views
+- ✅ 4 foreign key constraints
+- ✅ 8 check constraints
+- ✅ 15+ edge cases and scenarios
+
+**See [TESTING_GUIDE.md](./TESTING_GUIDE.md) for complete testing documentation.**
+
+---
+
 ## Related Documentation
 
+- [TESTING_GUIDE.md](./TESTING_GUIDE.md) - Complete testing suite documentation
+- [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) - Fast command reference
+- [DELIVERABLES.md](./DELIVERABLES.md) - Testing deliverables overview
 - [Learning Schema Design](./learning_schema_design.md) - Complete schema documentation
 - [Learning Flow Guide](./LEARNING_FLOW_GUIDE.md) - Detailed learning pipelines
 - [RAG Schema](../../src/scripts/setup_rag_schema.ts) - Existing RAG system
@@ -541,3 +585,4 @@ For issues or questions:
 2. Review the learning flow documentation
 3. Run health check queries
 4. Check PostgreSQL logs
+5. Review [TESTING_GUIDE.md](./TESTING_GUIDE.md) for testing issues

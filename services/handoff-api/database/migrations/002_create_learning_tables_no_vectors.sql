@@ -1,40 +1,14 @@
 -- ============================================================================
--- Migration: 002_create_learning_tables
+-- Migration: 002_create_learning_tables (No Vector Version)
 -- Description: Create tables for continuous learning AI system
 -- Author: Database Architect
 -- Date: 2025-02-09
 --
--- This migration creates the schema for tracking user feedback, owner
--- corrections, learning queue, response analytics, and voice transcripts.
---
--- Tables created:
---   - conversation_feedback: User reactions to AI responses
---   - owner_corrections: Business owner corrections during handoff
---   - learning_queue: Staging area for knowledge updates
---   - response_analytics: Response performance metrics
---   - voice_transcripts: Voice communication with sentiment analysis
---
--- Rollback: Drop all tables, indexes, functions, and triggers created here
+-- This version creates tables WITHOUT vector columns initially
+-- Vector columns will be added separately after pgvector installation
 -- ============================================================================
 
--- ============================================================================
--- BEGIN TRANSACTION
--- ============================================================================
 BEGIN;
-
--- ============================================================================
--- EXTENSIONS
--- ============================================================================
-
--- Ensure pgvector is installed (should already exist from migration 001)
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_extension WHERE extname = 'vector'
-  ) THEN
-    CREATE EXTENSION vector;
-  END IF;
-END $$;
 
 -- ============================================================================
 -- TABLE: conversation_feedback
@@ -47,12 +21,7 @@ CREATE TABLE IF NOT EXISTS conversation_feedback (
   rating INTEGER CHECK (rating >= 1 AND rating <= 5),
   reason TEXT,
   metadata JSONB DEFAULT '{}'::jsonb,
-  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-
-  -- Foreign key to conversations (added after table creation)
-  CONSTRAINT fk_feedback_conversation FOREIGN KEY (conversation_id)
-    REFERENCES conversations(id)
-    ON DELETE CASCADE
+  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
 COMMENT ON TABLE conversation_feedback IS 'User feedback on AI responses for learning and improvement';
@@ -74,12 +43,7 @@ CREATE TABLE IF NOT EXISTS owner_corrections (
   correction_context TEXT,
   metadata JSONB DEFAULT '{}'::jsonb,
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-  applied_at TIMESTAMPTZ,
-
-  -- Foreign key to conversations (added after table creation)
-  CONSTRAINT fk_corrections_conversation FOREIGN KEY (conversation_id)
-    REFERENCES conversations(id)
-    ON DELETE CASCADE
+  applied_at TIMESTAMPTZ
 );
 
 COMMENT ON TABLE owner_corrections IS 'Business owner corrections when AI provides incorrect information';
@@ -101,7 +65,6 @@ CREATE TABLE IF NOT EXISTS learning_queue (
   shop_id INTEGER NOT NULL,
   proposed_content TEXT NOT NULL,
   category TEXT,
-  embedding VECTOR(768),
   confidence_score INTEGER CHECK (confidence_score >= 0 AND confidence_score <= 100),
   metadata JSONB DEFAULT '{}'::jsonb,
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -116,7 +79,6 @@ COMMENT ON COLUMN learning_queue.status IS 'Current status: pending, approved, r
 COMMENT ON COLUMN learning_queue.source_type IS 'Where the learning came from: feedback, correction, transcript, or manual';
 COMMENT ON COLUMN learning_queue.source_id IS 'ID of the source record (feedback, correction, etc.)';
 COMMENT ON COLUMN learning_queue.proposed_content IS 'The proposed new knowledge content';
-COMMENT ON COLUMN learning_queue.embedding IS 'Vector embedding for semantic similarity and duplicate detection';
 COMMENT ON COLUMN learning_queue.confidence_score IS 'Confidence score 0-100 for auto-approval decisions';
 COMMENT ON COLUMN learning_queue.reviewed_by IS 'UUID of admin who reviewed the item';
 
@@ -134,12 +96,7 @@ CREATE TABLE IF NOT EXISTS response_analytics (
   response_time_ms INTEGER,
   ab_test_variant VARCHAR(50),
   metrics JSONB DEFAULT '{}'::jsonb,
-  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-
-  -- Foreign key to conversations (added after table creation)
-  CONSTRAINT fk_analytics_conversation FOREIGN KEY (conversation_id)
-    REFERENCES conversations(id)
-    ON DELETE CASCADE
+  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
 COMMENT ON TABLE response_analytics IS 'Analytics data for AI response performance and A/B testing';
@@ -159,17 +116,11 @@ CREATE TABLE IF NOT EXISTS voice_transcripts (
   conversation_id UUID,
   transcript TEXT NOT NULL,
   processed_summary TEXT,
-  embedding VECTOR(768),
   sentiment VARCHAR(20) CHECK (sentiment IN ('positive', 'neutral', 'negative', 'mixed')),
   entities JSONB DEFAULT '[]'::jsonb,
   learning_insights JSONB DEFAULT '{}'::jsonb,
   metadata JSONB DEFAULT '{}'::jsonb,
-  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-
-  -- Foreign key to conversations (added after table creation)
-  CONSTRAINT fk_transcripts_conversation FOREIGN KEY (conversation_id)
-    REFERENCES conversations(id)
-    ON DELETE SET NULL
+  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
 COMMENT ON TABLE voice_transcripts IS 'Voice communication transcripts with sentiment analysis and learning insights';
@@ -202,7 +153,6 @@ CREATE INDEX idx_learning_shop_id ON learning_queue(shop_id);
 CREATE INDEX idx_learning_source_type ON learning_queue(source_type);
 CREATE INDEX idx_learning_status_created ON learning_queue(status, created_at ASC);
 CREATE INDEX idx_learning_confidence ON learning_queue(confidence_score DESC);
-CREATE INDEX idx_learning_embedding_hnsw ON learning_queue USING hnsw (embedding vector_cosine_ops) WITH (m = 16, ef_construction = 64);
 
 -- ============================================================================
 -- INDEXES: response_analytics
@@ -220,7 +170,6 @@ CREATE INDEX idx_analytics_conversion ON response_analytics(led_to_conversion);
 CREATE INDEX idx_transcripts_conversation ON voice_transcripts(conversation_id);
 CREATE INDEX idx_transcripts_sentiment ON voice_transcripts(sentiment);
 CREATE INDEX idx_transcripts_created_at ON voice_transcripts(created_at DESC);
-CREATE INDEX idx_transcripts_embedding_hnsw ON voice_transcripts USING hnsw (embedding vector_cosine_ops) WITH (m = 16, ef_construction = 64);
 CREATE INDEX idx_transcripts_entities ON voice_transcripts USING GIN (entities);
 
 -- ============================================================================
@@ -341,34 +290,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 COMMENT ON FUNCTION update_learning_queue_timestamp() IS 'Automatically updates the updated_at timestamp on record modification';
-
--- Function: Check for similar existing knowledge (duplicate detection)
-CREATE OR REPLACE FUNCTION check_similar_knowledge(
-  p_shop_id INTEGER,
-  p_content TEXT,
-  p_embedding VECTOR(768),
-  p_threshold NUMERIC DEFAULT 0.85
-)
-RETURNS TABLE (
-  id UUID,
-  content TEXT,
-  similarity NUMERIC
-) AS $$
-BEGIN
-  RETURN QUERY
-  SELECT
-    kb.id,
-    kb.content,
-    (1 - (kb.embedding <=> p_embedding))::NUMERIC as similarity
-  FROM knowledge_base_rag kb
-  WHERE kb.shop_id = p_shop_id
-    AND (1 - (kb.embedding <=> p_embedding)) >= p_threshold
-  ORDER BY kb.embedding <=> p_embedding
-  LIMIT 5;
-END;
-$$ LANGUAGE plpgsql;
-
-COMMENT ON FUNCTION check_similar_knowledge(INTEGER, TEXT, VECTOR, NUMERIC) IS 'Checks for similar existing knowledge to prevent duplicates';
 
 -- Function: Batch process learning queue
 CREATE OR REPLACE FUNCTION batch_process_learning(
@@ -501,18 +422,6 @@ CREATE INDEX idx_audit_log_table ON learning_audit_log(table_name, record_id);
 CREATE INDEX idx_audit_log_action ON learning_audit_log(action);
 CREATE INDEX idx_audit_log_performed_at ON learning_audit_log(performed_at DESC);
 
--- ============================================================================
--- GRANT PERMISSIONS (Adjust as needed for your setup)
--- ============================================================================
-
--- Uncomment and adjust for your application user
--- GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO your_app_user;
--- GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO your_app_user;
--- GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO your_app_user;
-
--- ============================================================================
--- COMMIT TRANSACTION
--- ============================================================================
 COMMIT;
 
 -- ============================================================================
@@ -573,8 +482,8 @@ ORDER BY event_object_table, trigger_name;
 -- MIGRATION COMPLETE
 -- ============================================================================
 -- Tables created: 5
--- Indexes created: 26 (including partial indexes)
--- Functions created: 5
+-- Indexes created: 22 (no vector indexes yet)
+-- Functions created: 4 (no similar knowledge function yet)
 -- Triggers created: 3
 -- Materialized views created: 2
 -- ============================================================================

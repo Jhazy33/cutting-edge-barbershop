@@ -2,16 +2,22 @@
   "_comment": "Optimized configuration for Cutting Edge project - Reduced from 13 to 5 essential MCP servers to prevent context overflow",
   "mcpServers": {
     "filesystem": {
-      "_comment": "Essential: File system access for project files",
       "command": "npx",
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/Users/jhazy/AI_Projects/Cutting Edge"
+        "/Users/jhazy/Desktop",
+        "/Users/jhazy/Downloads",
+        "/Users/jhazy/mcp-server",
+        "/Users/jhazy/Library/Application Support/Claude/",
+        "/Users/jhazy/AI_Projects",
+        "/Users/jhazy/AI_Projects/Plaud Voice",
+        "/Users/jhazy/AI_Projects/Requirement Doc Website Files_Intake",
+        "/Users/jhazy/AI_Projects/fantasy-scout-ai",
+        "/Users/jhazy/AI_Projects/RooCode"
       ]
     },
     "brave-search": {
-      "_comment": "Essential: Web search for research and documentation",
       "command": "npx",
       "args": [
         "-y",
@@ -21,8 +27,31 @@
         "BRAVE_API_KEY": "BSA7X8KaGg4horrF7VfdvtvRJttcFQx"
       }
     },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "Context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "mcp-server-firecrawl": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "firecrawl-mcp"
+      ],
+      "env": {
+        "FIRECRAWL_API_KEY": "fc-a94bf87db73243729204bb4db73236ed"
+      }
+    },
     "fetch": {
-      "_comment": "Useful: Web fetching for documentation and APIs",
       "command": "npx",
       "args": [
         "-y",
@@ -34,7 +63,6 @@
       ]
     },
     "ken-you-remember": {
-      "_comment": "Essential: Persistent memory for project context and decisions",
       "command": "npx",
       "args": [
         "-y",
@@ -45,12 +73,57 @@
       }
     },
     "ken-you-think": {
-      "_comment": "Useful: Structured reasoning for complex decisions",
       "command": "npx",
       "args": [
         "-y",
         "ken-you-think"
       ]
+    },
+    "notion-mcp-server": {
+      "command": "node",
+      "args": [
+        "/Users/jhazy/AI_Projects/Daily Productivity App/notion-mcp-server/server.js"
+      ],
+      "env": {
+        "NOTION_TOKEN": "ntn_y94219182487v7xtnhO6rF5pl9XOJ2Per8yZlNizparezZ"
+      }
+    },
+    "ken8n-mcp": {
+      "command": "npx",
+      "args": [
+        "@kenkaiii/ken8n-mcp"
+      ]
+    },
+    "pal": {
+      "command": "/Users/jhazy/AI_Projects/pal-mcp-server/.pal_venv/bin/python",
+      "args": [
+        "/Users/jhazy/AI_Projects/pal-mcp-server/server.py"
+      ],
+      "env": {
+        "AZURE_OPENAI_ENDPOINT": "https://your-resource.openai.azure.com/",
+        "DEFAULT_MODEL": "auto",
+        "DEFAULT_THINKING_MODE_THINKDEEP": "high",
+        "CONVERSATION_TIMEOUT_HOURS": "24",
+        "MAX_CONVERSATION_TURNS": "40",
+        "LOG_LEVEL": "DEBUG",
+        "DISABLED_TOOLS": "analyze,refactor,testgen,secaudit,docgen,tracer",
+        "PAL_MCP_FORCE_ENV_OVERRIDE": "false",
+        "COMPOSE_PROJECT_NAME": "pal-mcp",
+        "TZ": "UTC",
+        "LOG_MAX_SIZE": "10MB"
+      }
+    },
+    "notebooklm": {
+      "command": "/opt/anaconda3/bin/notebooklm-mcp",
+      "args": []
+    },
+    "browsermcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@browsermcp/mcp@latest"
+      ],
+      "env": {}
     }
   },
   "_disabledServers": {
@@ -59,21 +132,30 @@
       "_reason": "Redundant with ken-you-remember",
       "_originalConfig": {
         "command": "npx",
-        "args": ["-y", "@modelcontextprotocol/server-memory"]
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-memory"
+        ]
       }
     },
     "Context7": {
       "_reason": "Not essential for current project needs",
       "_originalConfig": {
         "command": "npx",
-        "args": ["-y", "@upstash/context7-mcp@latest"]
+        "args": [
+          "-y",
+          "@upstash/context7-mcp@latest"
+        ]
       }
     },
     "mcp-server-firecrawl": {
       "_reason": "Redundant with fetch-mcp",
       "_originalConfig": {
         "command": "npx",
-        "args": ["-y", "firecrawl-mcp"],
+        "args": [
+          "-y",
+          "firecrawl-mcp"
+        ],
         "env": {
           "FIRECRAWL_API_KEY": "fc-a94bf87db73243729204bb4db73236ed"
         }
@@ -83,7 +165,9 @@
       "_reason": "Not needed for Cutting Edge project",
       "_originalConfig": {
         "command": "node",
-        "args": ["/Users/jhazy/AI_Projects/Daily Productivity App/notion-mcp-server/server.js"],
+        "args": [
+          "/Users/jhazy/AI_Projects/Daily Productivity App/notion-mcp-server/server.js"
+        ],
         "env": {
           "NOTION_TOKEN": "ntn_y94219182487v7xtnhO6rF5pl9XOJ2Per8yZlNizparezZ"
         }
@@ -93,14 +177,18 @@
       "_reason": "Not needed for current development",
       "_originalConfig": {
         "command": "npx",
-        "args": ["@kenkaiii/ken8n-mcp"]
+        "args": [
+          "@kenkaiii/ken8n-mcp"
+        ]
       }
     },
     "pal": {
       "_reason": "Not needed for current project phase",
       "_originalConfig": {
         "command": "/Users/jhazy/AI_Projects/pal-mcp-server/.pal_venv/bin/python",
-        "args": ["/Users/jhazy/AI_Projects/pal-mcp-server/server.py"],
+        "args": [
+          "/Users/jhazy/AI_Projects/pal-mcp-server/server.py"
+        ],
         "env": {
           "AZURE_OPENAI_ENDPOINT": "https://your-resource.openai.azure.com/",
           "DEFAULT_MODEL": "auto",
@@ -127,7 +215,10 @@
       "_reason": "Not essential for current backend work",
       "_originalConfig": {
         "command": "npx",
-        "args": ["-y", "@browsermcp/mcp@latest"],
+        "args": [
+          "-y",
+          "@browsermcp/mcp@latest"
+        ],
         "env": {}
       }
     }
