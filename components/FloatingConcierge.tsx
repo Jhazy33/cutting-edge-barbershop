@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SQUIRE_LINK, IMAGES } from '../constants';
 // Realtime subscription removed - Supabase client has realtime disabled
 // to prevent WebSocket security errors on HTTPS pages

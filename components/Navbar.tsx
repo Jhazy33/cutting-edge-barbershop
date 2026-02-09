@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
             href={SQUIRE_LINK}
             target="_blank"
             rel="noreferrer"
-            className="bg-primary text-white px-8 py-3 text-base font-bold uppercase tracking-wide hover:bg-red-700 transition-all hover:shadow-[0_0_15px_rgba(204,0,0,0.6)]"
+            className="bg-primary text-white px-8 py-3 text-base font-bold uppercase tracking-wide hover:bg-red-700 transition-all hover:shadow-[0_0_15px_rgba(204,0,0,0.6)] rounded-lg"
           >
             Book Now
           </a>
