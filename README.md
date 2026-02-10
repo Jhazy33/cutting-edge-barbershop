@@ -18,6 +18,7 @@ A modern, AI-integrated barbershop website with RAG-powered chatbot capabilities
 - **[Project Status](./PROJECT_STATUS.md)** - Current implementation status and metrics
 - **[Phase 3 Plan](./PHASE_3_PLAN.md)** - Production deployment strategy
 - **[Deployment Checklist](./services/DEPLOYMENT_CHECKLIST.md)** - Production deployment guide
+- **[Vercel Dev](https://cutting-edge-main-git-dev-jhazy33s-projects.vercel.app/)** - Development environment
 - **[Live Site](https://nexxt.cihconsultingllc.com)** - Main website
 
 ---

@@ -11,6 +11,7 @@
 | Component | Status | Health | Notes |
 |-----------|--------|--------|-------|
 | **Main Website** | ✅ Complete | 🟢 | Deployed and functional |
+| **Vercel Dev** | ✅ Deployed | 🟢 | https://cutting-edge-main-git-dev-jhazy33s-projects.vercel.app/ |
 | **RAG System** | ✅ Complete | 🟢 | Integrated and optimized |
 | **Chatbot** | ✅ Complete | 🟢 | With source citations |
 | **Performance** | ✅ Optimized | 🟢 | 100x cache improvement |
