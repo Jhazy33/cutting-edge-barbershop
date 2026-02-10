@@ -349,7 +349,7 @@ f207eaf4 fix: Refine FloatingConcierge component styling
 - [Deployment Checklist](./services/DEPLOYMENT_CHECKLIST.md)
 
 ### Services:
-- [Main Site](https://nexxt.cihconsultingllc.com)
+- [Main Site](https://cuttingedge.cihconsultingllc.com)
 - [VPS](http://109.199.118.38:5432)
 
 ### Git:

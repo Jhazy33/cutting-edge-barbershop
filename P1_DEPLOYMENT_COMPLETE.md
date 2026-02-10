@@ -214,7 +214,7 @@ The migration script uses PostgreSQL syntax that may not be compatible with the 
    pm2 restart all
 
    # Run health checks
-   curl https://nexxt.cihconsultingllc.com/api/events
+   curl https://cuttingedge.cihconsultingllc.com/api/events
    ```
 
 ### Short Term (This Week)
@@ -242,7 +242,7 @@ The migration script uses PostgreSQL syntax that may not be compatible with the 
 - **Commit**: https://github.com/Jhazy33/cutting-edge-barbershot/commit/6a04ea4e
 
 ### VPS Access
-- **Website**: https://nexxt.cihconsultingllc.com
+- **Website**: https://cuttingedge.cihconsultingllc.com
 - **VPS IP**: https://109.199.118.38
 - **Supabase Studio**: https://supabase.cihconsultingllc.com
 - **Project Directory**: `/root/NeXXT_WhatsGoingOn`

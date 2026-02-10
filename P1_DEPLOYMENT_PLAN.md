@@ -225,12 +225,12 @@
 ### Phase 9: Health Checks
 - [ ] **Task 9.1**: Test main website
   ```bash
-  curl -I https://nexxt.cihconsultingllc.com
+  curl -I https://cuttingedge.cihconsultingllc.com
   ```
   Expected: 200 OK
 - [ ] **Task 9.2**: Test API endpoints
   ```bash
-  curl https://nexxt.cihconsultingllc.com/api/events
+  curl https://cuttingedge.cihconsultingllc.com/api/events
   ```
   Expected: 200 OK with JSON response
 - [ ] **Task 9.3**: Test database connection

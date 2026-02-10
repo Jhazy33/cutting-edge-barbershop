@@ -15,7 +15,7 @@
 - **Deployment Tag**: `v1.0-p1-security`
 
 ### Production Environment
-- **Production Site**: https://nexxt.cihconsultingllc.com
+- **Production Site**: https://cuttingedge.cihconsultingllc.com
 - **VPS Server**: 109.199.118.38 (Contabo)
 - **Supabase Studio**: https://supabase.cihconsultingllc.com
 
@@ -261,7 +261,7 @@ services/
 
 ### URLs
 - **Vercel Dev**: https://cutting-edge-main-git-dev-jhazy33s-projects.vercel.app/
-- **Production**: https://nexxt.cihconsultingllc.com
+- **Production**: https://cuttingedge.cihconsultingllc.com
 - **GitHub**: https://github.com/Jhazy33/cutting-edge-barbershop
 - **Deployment Tag**: https://github.com/Jhazy33/cutting-edge-barbershop/releases/tag/v1.0-p1-security
 
@@ -306,7 +306,7 @@ OLLAMA_BASE_URL=http://localhost:11434
 
 ### Monitoring
 - **PM2**: `pm2 status`, `pm2 logs`, `pm2 monit`
-- **Health Check**: `curl https://nexxt.cihconsultingllc.com/api/events`
+- **Health Check**: `curl https://cuttingedge.cihconsultingllc.com/api/events`
 - **Database**: `docker stats nexxt_whatsgoingon-postgres-1`
 
 ---

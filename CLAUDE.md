@@ -13,7 +13,7 @@
 - **Deployment Tag**: v1.0-p1-security
 
 ### Production
-- **Main Website**: https://nexxt.cihconsultingllc.com
+- **Main Website**: https://cuttingedge.cihconsultingllc.com
 - **Direct IP**: https://109.199.118.38
 - **Supabase Studio**: https://supabase.cihconsultingllc.com
 
@@ -234,7 +234,7 @@ cutting-edge/
 
 - **GitHub**: https://github.com/Jhazy33/cutting-edge-barbershop
 - **Vercel Dev**: https://cutting-edge-main-git-dev-jhazy33s-projects.vercel.app/
-- **Production**: https://nexxt.cihconsultingllc.com
+- **Production**: https://cuttingedge.cihconsultingllc.com
 - **Deployment Tag**: https://github.com/Jhazy33/cutting-edge-barbershop/releases/tag/v1.0-p1-security
 
 ---
