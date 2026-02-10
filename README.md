@@ -18,7 +18,7 @@ A modern, AI-integrated barbershop website with RAG-powered chatbot capabilities
 - **[Project Status](./PROJECT_STATUS.md)** - Current implementation status and metrics
 - **[Phase 3 Plan](./PHASE_3_PLAN.md)** - Production deployment strategy
 - **[Deployment Checklist](./services/DEPLOYMENT_CHECKLIST.md)** - Production deployment guide
-- **[Live Site](https://nexxt.cihconsultingllc.com)** - Main website
+- **[Live Site](https://cuttingedge.cihconsultingllc.com)** - Main website
 
 ---
 
@@ -365,7 +365,7 @@ For issues or questions:
 
 ## 🌐 Live Links
 
-- **Main Website**: https://nexxt.cihconsultingllc.com
+- **Main Website**: https://cuttingedge.cihconsultingllc.com
 - **VPS**: 109.199.118.38:5432
 - **Repository**: Local (git)
 

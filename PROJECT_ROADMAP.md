@@ -455,7 +455,7 @@ cutting-edge/
 
 ### Git Repositories:
 - **Main**: https://github.com/your-org/cutting-edge
-- **Main Site**: https://nexxt.cihconsultingllc.com
+- **Main Site**: https://cuttingedge.cihconsultingllc.com
 - **VPS**: 109.199.118.38:5432
 
 ---

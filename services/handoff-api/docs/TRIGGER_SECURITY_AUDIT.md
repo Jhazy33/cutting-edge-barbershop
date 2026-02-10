@@ -5,7 +5,7 @@
 **System**: Phase 2.5 Learning System - Auto-Update Triggers
 **Scope**: Migration 004_knowledge_auto_triggers.sql and related functions
 **Database**: PostgreSQL 14+ with pgvector extension
-**Environment**: Production (https://nexxt.cihconsultingllc.com)
+**Environment**: Production (https://cuttingedge.cihconsultingllc.com)
 
 ---
 
