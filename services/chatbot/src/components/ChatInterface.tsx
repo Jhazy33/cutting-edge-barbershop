@@ -10,8 +10,9 @@ interface ChatMessage {
 }
 
 // Configuration
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-const OLLAMA_API = import.meta.env.VITE_OLLAMA_API || 'http://localhost:11434';
+const API_URL = import.meta.env.VITE_API_URL || 'https://api.cihconsultingllc.com';
+const OLLAMA_API = import.meta.env.VITE_OLLAMA_API || 'https://ai.cihconsultingllc.com';
+const SHOP_ID = 1; // Cutting Edge Barbershop
 
 export const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -35,7 +36,10 @@ export const ChatInterface: React.FC = () => {
     try {
       const response = await fetch(`${API_URL}/api/knowledge/search`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': 'CE_AGENT_2026_SECRET'
+        },
         body: JSON.stringify({
           query,
           shopId: 1,
