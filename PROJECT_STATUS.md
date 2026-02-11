@@ -1,8 +1,8 @@
 # Cutting Edge - Project Status
 
-**Last Updated**: 2026-02-09
-**Current Phase**: Phase 2 Complete | Phase 3 Planning
-**Overall Health**: 🟢 Healthy
+**Last Updated**: 2026-02-11
+**Current Phase**: Phase 2 Complete | Phase 3 Planning | Chatbot Fix Required
+**Overall Health**: 🟡 Mostly Healthy | Chatbot Non-Functional
 
 ---
 
@@ -13,7 +13,7 @@
 | **Main Website** | ✅ Complete | 🟢 | Deployed and functional |
 | **Vercel Dev** | ✅ Deployed | 🟢 | https://cutting-edge-main-git-dev-jhazy33s-projects.vercel.app/ |
 | **RAG System** | ✅ Complete | 🟢 | Integrated and optimized |
-| **Chatbot** | ✅ Complete | 🟢 | With source citations |
+| **Chatbot** | ⚠️ Non-functional | 🔴 | Page loads but external APIs timeout |
 | **Performance** | ✅ Optimized | 🟢 | 100x cache improvement |
 | **Testing** | ⏳ Pending | 🟡 | Benchmarks created, not run |
 | **Deployment** | 🔄 Planning | 🟡 | Checklist ready |
@@ -69,6 +69,16 @@
 
 ## Recent Work (Last 7 Days)
 
+### 2026-02-11
+- ✅ **Resolved critical VPS SSH timeout issue** - Root cause: Ollama memory exhaustion
+- 📝 **Created SSH_TIMEOUT_ROOT_CAUSE_ANALYSIS.md** - Complete investigation report
+- ✅ **Freed 6.5GB RAM** by disabling Ollama service (was causing SSH timeouts)
+- ✅ **Verified chatbot health** - cutting-edge_chatbot_1 running on port 3001
+- ✅ **nginx status confirmed** - Active and serving both sites correctly
+- 🔍 **Chatbot investigation complete** - Found external API dependencies failing
+- 📝 **Created CHATBOT_INVESTIGATION_20260211.md** - Full diagnosis and solutions
+- ⚠️ **Chatbot non-functional** - External APIs timing out, needs reconfiguration
+
 ### 2026-02-09
 - ✅ **Completed Phase 2** - RAG Integration & Performance Optimization
 - ✅ **Created comprehensive documentation** (~2,000 lines)
@@ -87,6 +97,8 @@
 
 | Blocker | Impact | Priority | Owner | Status |
 |---------|--------|----------|-------|--------|
+| **Chatbot Non-Functional** | High | High | DevOps | 🔍 Investigating |
+| **External API Timeouts** | High | High | DevOps | 🔄 Fix Required |
 | **Phase 3 Planning** | Medium | High | DevOps | 🔄 In Progress |
 | **Testing Execution** | Low | Medium | QA | ⏳ Pending |
 | **Claude Context Crashes** | Low | Low | Dev | ✅ Resolved |
@@ -150,30 +162,36 @@
 ## Next Steps (Priority Order)
 
 ### Immediate (This Week):
-1. **🔄 Run Performance Benchmarks**
+1. **🔴 Fix Chatbot Functionality** (HIGH PRIORITY)
+   - Update `docker-compose.chatbot.yml` to use local handoff-api
+   - Rebuild and redeploy chatbot container
+   - Test end-to-end chat functionality
+   - See: `CHATBOT_INVESTIGATION_20260211.md` for details
+
+2. **🔄 Run Performance Benchmarks**
    ```bash
    cd services/handoff-api
    npm run benchmark
    npm run verify
    ```
 
-2. **🔄 Complete Phase 3 Planning**
+3. **🔄 Complete Phase 3 Planning**
    - Define infrastructure requirements
    - Choose deployment platform
    - Create implementation timeline
 
-3. **🔄 Set Up Staging Environment**
+4. **🔄 Set Up Staging Environment**
    - Provision staging server
    - Deploy RAG system
    - Test with production data
 
 ### Short-term (Next 2 Weeks):
-4. **📋 Execute Testing Plan**
+2. **📋 Execute Testing Plan**
    - Run unit tests
    - Integration testing
    - Load testing (100+ concurrent users)
 
-5. **📋 Production Deployment**
+3. **📋 Production Deployment**
    - Configure production environment
    - Deploy to production
    - Monitor and validate
@@ -277,10 +295,14 @@ f207eaf4 fix: Refine FloatingConcierge component styling
 
 | Issue | Severity | Status | Resolution |
 |-------|----------|--------|------------|
+| Chatbot non-functional (external APIs) | High | 🔍 Diagnosed | Reconfigure to use local handoff-api |
+| External API timeouts (RAG + Ollama) | High | 🔄 Fix Required | Update chatbot to use localhost APIs |
+| VPS SSH timeouts (Ollama memory) | Critical | ✅ Resolved | Disabled Ollama, freed 6.5GB RAM |
 | Claude context crashes | Low | ✅ Resolved | Optimized configuration, consolidated docs |
 | Missing unit tests | Medium | ⏳ Pending | Phase 3 deliverable |
 | No load testing | Medium | ⏳ Pending | Phase 3 deliverable |
 | Documentation scattered | Low | ✅ Resolved | Created master roadmap |
+| Ollama AI service unavailable | Low | ⚠️ Intentional | Disabled to prevent memory exhaustion |
 
 ---
 
