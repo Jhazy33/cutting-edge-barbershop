@@ -35,8 +35,12 @@ const App: React.FC = () => {
         const id = anchor.getAttribute('href')?.substring(1);
         const element = document.getElementById(id || '');
         if (element && scrollRef.current) {
+          // Get the scroll-margin-top value (320px for Services section)
+          const computedStyle = window.getComputedStyle(element);
+          const scrollMarginTop = parseInt(computedStyle.scrollMarginTop) || 0;
+          
           scrollRef.current.scrollTo({
-            top: element.offsetTop,
+            top: element.offsetTop - scrollMarginTop,
             behavior: 'smooth'
           });
         }
@@ -72,8 +76,8 @@ const App: React.FC = () => {
       >
         <style dangerouslySetInnerHTML={{
           __html: `
-          :root { --mask-h: 240px; }
-          @media (min-width: 768px) { :root { --mask-h: 400px; } }
+          :root { --mask-h: 120px; }
+          @media (min-width: 768px) { :root { --mask-h: 160px; } }
         `}} />
 
         <main>

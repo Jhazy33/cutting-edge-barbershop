@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  chatbot:
+    build:
+      context: ./services/chatbot
+      dockerfile: Dockerfile
+    image: cutting-edge-chatbot:latest
+    container_name: cutting-edge-chatbot
+    ports:
+      - "3001:80"
+    environment:
+      - VITE_API_URL=https://api.cihconsultingllc.com
+      - VITE_OLLAMA_API=https://ai.cihconsultingllc.com
+    restart: unless-stopped
+    networks:
+      - cutting-edge-network
+
+networks:
+  cutting-edge-network:
+    external: true
