@@ -1,0 +1,32 @@
+{
+  "name": "cutting-edge-handoff-api",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "ingest": "tsx src/scripts/ingest_knowledge_base.ts",
+    "benchmark": "tsx src/scripts/benchmark_rag.ts",
+    "benchmark:storage": "tsx src/scripts/benchmark_conversation_storage.ts",
+    "quick-start": "tsx src/examples/quick-start.ts",
+    "verify": "tsx src/scripts/verify_implementation.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.9",
+    "dotenv": "^16.3.1",
+    "hono": "^4.11.9",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.33",
+    "@types/pg": "^8.16.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.0"
+  }
+}
