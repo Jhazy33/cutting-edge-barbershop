@@ -84,7 +84,10 @@ If you don't know something specific, say so and suggest they contact the shop d
 
     const response = await fetch(`${OLLAMA_API}/api/chat`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Ollama-Key': 'CE_AGENT_2026_SECRET'
+      },
       body: JSON.stringify({
         model: 'gemma:2b',
         messages: [
