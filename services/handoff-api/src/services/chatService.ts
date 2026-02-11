@@ -158,7 +158,7 @@ If you don't know something specific, say so and suggest they contact the shop d
  * Generate response using Ollama API
  */
 async function generateOllamaResponse(messages: ChatMessage[]): Promise<string> {
-  const lastError: Error | null = null;
+  let lastError: Error | null = null;
 
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     try {
