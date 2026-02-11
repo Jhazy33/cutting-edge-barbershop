@@ -10,12 +10,63 @@ services:
     ports:
       - "3001:80"
     environment:
-      - VITE_API_URL=https://api.cihconsultingllc.com
-      - VITE_OLLAMA_API=https://ai.cihconsultingllc.com
+      - VITE_API_URL=http://handoff-api:3000
+    depends_on:
+      - handoff-api
+    restart: unless-stopped
+    networks:
+      - cutting-edge-network
+
+  handoff-api:
+    build:
+      context: ./services/handoff-api
+      dockerfile: Dockerfile
+    image: cutting-edge-handoff-api:latest
+    container_name: cutting-edge-handoff-api
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgresql://postgres:Iverson1975Strong@postgres:5432/nexxt_db
+      - OLLAMA_BASE_URL=http://ollama:11434
+    depends_on:
+      - postgres
+      - ollama
+    restart: unless-stopped
+    networks:
+      - cutting-edge-network
+
+  postgres:
+    image: pgvector/pgvector:pg15
+    container_name: cutting-edge-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Iverson1975Strong
+      - POSTGRES_DB=nexxt_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - cutting-edge-network
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: cutting-edge-ollama
+    volumes:
+      - ollama-data:/root/.ollama
+    ports:
+      - "11434:11434"
     restart: unless-stopped
     networks:
       - cutting-edge-network
 
 networks:
   cutting-edge-network:
-    external: true
+    external: false
+    name: cutting-edge-network
+
+volumes:
+  postgres-data:
+  ollama-data:

@@ -9,10 +9,15 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-// Configuration
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.cihconsultingllc.com';
-const OLLAMA_API = import.meta.env.VITE_OLLAMA_API || 'https://ai.cihconsultingllc.com';
+// Configuration - Single local API endpoint
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const SHOP_ID = 1; // Cutting Edge Barbershop
+
+interface ChatResponse {
+  response: string;
+  sources?: MessageSource[];
+  conversationId?: string;
+}
 
 export const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -31,124 +36,45 @@ export const ChatInterface: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  // RAG: Retrieve context before generating response
-  const retrieveContext = async (query: string): Promise<MessageSource[]> => {
+  /**
+   * Send message to local API
+   *
+   * The backend handles:
+   * - RAG context retrieval
+   * - AI generation (Ollama)
+   * - Response formatting
+   */
+  const sendMessage = async (userMessage: string): Promise<{ response: string; sources?: MessageSource[] }> => {
     try {
-      const response = await fetch(`${API_URL}/api/knowledge/search`, {
+      const response = await fetch(`${API_URL}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': 'CE_AGENT_2026_SECRET'
         },
         body: JSON.stringify({
-          query,
-          shopId: 1,
-          limit: 3,
-          threshold: 0.7
+          message: userMessage,
+          shopId: SHOP_ID,
+          conversationHistory: messages.map(m => ({
+            role: m.role,
+            content: m.content
+          }))
         })
       });
 
       if (!response.ok) {
-        console.error('RAG search failed:', response.status);
-        return [];
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `API error: ${response.status}`);
       }
 
-      const data = await response.json();
-      return data.results || [];
+      const data: ChatResponse = await response.json();
+      return {
+        response: data.response,
+        sources: data.sources
+      };
     } catch (err) {
-      console.error('RAG retrieval failed:', err);
-      return [];
+      console.error('Chat API error:', err);
+      throw err;
     }
-  };
-
-  // Send message to Ollama with streaming
-  const sendMessageStream = async (
-    userMessage: string,
-    context: MessageSource[]
-  ): Promise<string> => {
-    // Build enhanced system prompt with retrieved context
-    let systemInstruction = `You are a helpful assistant for Cutting Edge Barbershop.
-
-Be concise, friendly, and professional. Answer questions about:
-- Services and pricing
-- Hours and location
-- Staff and barbers
-- Booking and appointments
-- Policies and procedures
-
-If you don't know something specific, say so and suggest they contact the shop directly.`;
-
-    // Add RAG context to system instruction
-    if (context.length > 0) {
-      const contextText = context
-        .map(c => `- [${c.category}] ${c.content}`)
-        .join('\n');
-      systemInstruction += `\n\nRELEVANT INFORMATION:\n${contextText}\n\nUse this information to answer accurately. If the information doesn't answer the question, say so politely.`;
-    }
-
-    const response = await fetch(`${OLLAMA_API}/api/chat`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Ollama-Key': 'CE_AGENT_2026_SECRET'
-      },
-      body: JSON.stringify({
-        model: 'gemma:2b',
-        messages: [
-          { role: 'system', content: systemInstruction },
-          ...messages.map(m => ({
-            role: m.role,
-            content: m.content
-          })),
-          { role: 'user', content: userMessage }
-        ],
-        stream: true
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`Ollama API error: ${response.status}`);
-    }
-
-    const reader = response.body?.getReader();
-    if (!reader) {
-      throw new Error('No response body');
-    }
-
-    const decoder = new TextDecoder();
-    let fullResponse = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      const chunk = decoder.decode(value);
-      const lines = chunk.split('\n').filter(line => line.trim());
-
-      for (const line of lines) {
-        try {
-          const parsed = JSON.parse(line);
-          if (parsed.message?.content) {
-            fullResponse += parsed.message.content;
-
-            // Update UI with streaming response
-            setMessages(prev => {
-              const newMessages = [...prev];
-              const lastMessage = newMessages[newMessages.length - 1];
-              if (lastMessage && lastMessage.role === 'assistant') {
-                lastMessage.content = fullResponse;
-              }
-              return newMessages;
-            });
-          }
-        } catch (e) {
-          // Skip invalid JSON
-          console.error('Failed to parse chunk:', line);
-        }
-      }
-    }
-
-    return fullResponse;
   };
 
   // Handle form submission
@@ -169,40 +95,21 @@ If you don't know something specific, say so and suggest they contact the shop d
     setError(null);
 
     try {
-      // RAG Step 1: Retrieve relevant context
-      const retrievedContext = await retrieveContext(userMessage.content);
+      // Call single local API endpoint
+      const { response, sources } = await sendMessage(userMessage.content);
 
-      // Add placeholder for assistant response
+      // Add assistant response
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: '',
+        content: response,
+        sources: sources && sources.length > 0 ? sources : undefined,
         timestamp: new Date()
       }]);
 
-      // RAG Step 2: Generate response with context
-      const assistantResponse = await sendMessageStream(
-        userMessage.content,
-        retrievedContext
-      );
-
-      // Update with final response and sources
-      setMessages(prev => {
-        const newMessages = [...prev];
-        const lastMessage = newMessages[newMessages.length - 1];
-        if (lastMessage && lastMessage.role === 'assistant') {
-          lastMessage.content = assistantResponse;
-          lastMessage.sources = retrievedContext.length > 0 ? retrievedContext : undefined;
-        }
-        return newMessages;
-      });
-
     } catch (err) {
       console.error('Chat error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to send message');
-
-      // Remove the placeholder message
-      setMessages(prev => prev.slice(0, -1));
+      setError(err instanceof Error ? err.message : 'Failed to send message. Please try again.');
     } finally {
       setIsLoading(false);
       inputRef.current?.focus();
@@ -238,7 +145,7 @@ If you don't know something specific, say so and suggest they contact the shop d
                   Digital Concierge
                 </h1>
                 <p className="text-[10px] text-sky-400 uppercase tracking-widest font-medium">
-                  Sovereign AI • Local Ollama
+                  Sovereign AI • Local API
                 </p>
               </div>
             </div>
@@ -339,7 +246,7 @@ If you don't know something specific, say so and suggest they contact the shop d
           </form>
           <div className="flex items-center justify-between mt-4 px-2">
             <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-bold">
-              Model: <span className="text-sky-400">gemma:2b</span>
+              Local API: <span className="text-sky-400">Integrated</span>
             </p>
             <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-bold">
               Encrypted Privacy Shield Active

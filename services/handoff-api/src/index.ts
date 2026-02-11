@@ -26,6 +26,7 @@ import {
   flagForReview,
   getConversationsNeedingReview
 } from './services/conversationStorage.js';
+import { handleChat } from './services/chatService.js';
 
 // ============================================================================
 // APP INITIALIZATION
@@ -59,6 +60,110 @@ app.get('/api/health', (c) => {
     version: '1.0.0',
     timestamp: new Date().toISOString()
   });
+});
+
+// ============================================================================
+// UNIFIED CHAT ENDPOINT
+// ============================================================================
+
+/**
+ * POST /api/chat
+ *
+ * Unified RAG + AI generation endpoint.
+ * Combines knowledge retrieval with Ollama AI response.
+ *
+ * Request body:
+ * {
+ *   "message": "What are your hours?",
+ *   "shopId": 1,
+ *   "conversationHistory": [
+ *     { "role": "user", "content": "previous message" },
+ *     { "role": "assistant", "content": "previous response" }
+ *   ],
+ *   "limit": 3,
+ *   "threshold": 0.7
+ * }
+ *
+ * Response:
+ * {
+ *   "response": "The shop is open Mon-Fri 9am-7pm",
+ *   "sources": [
+ *     { "content": "...", "category": "hours", "similarity": 0.95, "source": "manual" }
+ *   ]
+ * }
+ */
+app.post('/api/chat', async (c) => {
+  try {
+    const body = await c.req.json();
+    const {
+      message,
+      shopId,
+      conversationHistory = [],
+      limit = 3,
+      threshold = 0.7
+    } = body;
+
+    // Input validation
+    if (!message || typeof message !== 'string' || message.trim().length < 1) {
+      return c.json({
+        error: 'Message is required and must be non-empty'
+      }, 400);
+    }
+
+    if (!shopId || typeof shopId !== 'number' || shopId <= 0) {
+      return c.json({
+        error: 'Valid shopId is required'
+      }, 400);
+    }
+
+    if (limit && (limit < 1 || limit > 100)) {
+      return c.json({
+        error: 'Limit must be between 1 and 100'
+      }, 400);
+    }
+
+    if (threshold && (threshold < 0 || threshold > 1)) {
+      return c.json({
+        error: 'Threshold must be between 0 and 1'
+      }, 400);
+    }
+
+    if (!Array.isArray(conversationHistory)) {
+      return c.json({
+        error: 'conversationHistory must be an array'
+      }, 400);
+    }
+
+    // Handle chat
+    const response = await handleChat({
+      message: message.trim(),
+      shopId,
+      conversationHistory,
+      limit,
+      threshold
+    });
+
+    return c.json({
+      success: true,
+      ...response,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Chat endpoint failed:', error);
+
+    // Check if it's an Ollama connection error
+    if (error instanceof Error && error.message.includes('Ollama')) {
+      return c.json({
+        error: 'AI service temporarily unavailable',
+        message: 'The AI service is not responding. Please try again later.'
+      }, 503);
+    }
+
+    return c.json({
+      error: 'Chat failed',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    }, 500);
+  }
 });
 
 // ============================================================================
@@ -745,6 +850,7 @@ serve({
 
 console.log(`✅ Server running at http://localhost:${PORT}`);
 console.log(`📚 Endpoints:`);
+console.log(`   POST /api/chat - Unified RAG + AI generation`);
 console.log(`   POST /api/knowledge/search - Search knowledge base`);
 console.log(`   POST /api/knowledge/learn - Add new knowledge`);
 console.log(`   POST /api/feedback/rating - Submit conversation feedback`);
