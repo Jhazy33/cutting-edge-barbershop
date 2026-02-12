@@ -11,7 +11,7 @@
 |-------|--------|
 | **Filename** | MASTER_TASK_TRACKER.md |
 | **Created** | 2026-02-11 22:15:00 EST |
-| **Last Modified** | 2026-02-12 03:30:00 EST |
+| **Last Modified** | 2026-02-12 13:45:00 EST |
 | **Version** | 1.0 |
 | **Status** | Active |
 | **Location** | `/Users/jhazy/AI_Projects/Cutting Edge/` |
@@ -65,6 +65,55 @@
 ---
 
 ## Current Tasks (Priority Order)
+
+### ✅ COMPLETED TODAY (2026-02-12 13:45:00 EST)
+
+#### 9. Chat Mode Link Fix ✅
+**Created**: 2026-02-12 13:30:00 EST
+**Completed**: 2026-02-12 13:45:00 EST
+**Priority**: HIGH
+**Status**: ✅ COMPLETE
+**Assigned To**: Claude Code (orchestrator + multi-agents)
+
+**Description**: Fix Chat Mode button pointing to wrong domain
+
+**Root Cause**:
+- Local code (GitHub dev): ✅ CORRECT - points to `chat.cuttingedge.cihconsultingllc.com`
+- Deployed code on VPS: ❌ WRONG - pointed to `chat.cihconsultingllc.com`
+- The VPS had old compiled assets with incorrect URL
+
+**Actions Taken**:
+- [x] Built main site locally from dev branch (npm run build)
+- [x] Verified new build has correct URL (chat.cuttingedge.cihconsultingllc.com)
+- [x] Backed up current VPS deployment
+- [x] Deployed new build to VPS (/var/www/cuttingedge/)
+- [x] Fixed file permissions (www-data:www-data, 755)
+- [x] Tested and reloaded nginx
+- [x] Verified deployed build has correct URL
+- [x] Committed changes to git with comprehensive commit message
+- [x] Pushed to GitHub dev branch
+
+**Result**: ✅ Chat Mode button now correctly redirects to https://chat.cuttingedge.cihconsultingllc.com
+
+**Files Modified**:
+- services/main-site/components/FloatingConcierge.tsx (already correct)
+- services/main-site/dist/ (rebuilt production assets)
+- /var/www/cuttingedge/ (redeployed on VPS)
+
+**Completion Criteria**:
+- [x] Build completed successfully
+- [x] Backup created on VPS
+- [x] New build deployed to VPS
+- [x] File permissions fixed
+- [x] Nginx reloaded successfully
+- [x] Deployed build verified with correct URL
+- [x] Changes committed and pushed to GitHub dev branch
+
+**Next Steps**:
+1. User should test Chat Mode button in browser (clear cache first)
+2. Verify redirect goes to https://chat.cuttingedge.cihconsultingllc.com ✅
+
+---
 
 ### ✅ COMPLETED TODAY (2026-02-12 04:00:00 EST)
 
