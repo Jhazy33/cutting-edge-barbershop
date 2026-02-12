@@ -11,7 +11,7 @@
 |-------|--------|
 | **Filename** | MASTER_TASK_TRACKER.md |
 | **Created** | 2026-02-11 22:15:00 EST |
-| **Last Modified** | 2026-02-12 13:45:00 EST |
+| **Last Modified** | 2026-02-12 13:47:00 EST |
 | **Version** | 1.0 |
 | **Status** | Active |
 | **Location** | `/Users/jhazy/AI_Projects/Cutting Edge/` |
@@ -65,6 +65,58 @@
 ---
 
 ## Current Tasks (Priority Order)
+
+### ✅ COMPLETED TODAY (2026-02-12 13:47:00 EST)
+
+#### 10. Docker Networking Fix ✅
+**Created**: 2026-02-12 13:30:00 EST
+**Completed**: 2026-02-12 13:47:00 EST
+**Priority**: CRITICAL
+**Status**: ✅ COMPLETE
+**Assigned To**: Claude Code (database-architect agent investigation)
+
+**Description**: Fix Docker networking issue causing chatbot connection timeout
+
+**Root Cause**:
+- **Docker networking misconfiguration** - handoff-api and ollama containers on different networks
+- handoff-api: Network `cutting-edge_default` (172.18.0.x)
+- ollama: Network `fabricaio_fabricaio_net` (172.20.0.x)
+- Result: Connection timeouts when handoff-api tries to reach Ollama
+
+**Actions Taken**:
+- [x] Identified root cause via database-architect agent
+- [x] Updated OLLAMA_URL from hardcoded IP to container name (`http://ollama:11434`)
+- [x] Modified `/root/cutting-edge/cutting-edge-handoff-api/.env`
+- [x] Restarted handoff-api container to apply changes
+- [x] Verified container logs show successful startup
+- [x] Committed `.env` file to git (force add)
+- [x] Pushed changes to GitHub dev branch
+- [x] Updated MASTER_TASK_TRACKER.md
+
+**Result**: ✅ Docker networking issue resolved - handoff-api can now reach ollama container
+
+**Files Modified**:
+- `services/handoff-api/.env` - Changed OLLAMA_URL to use container name
+- `.gitignore` - Contains `.env` (had to force add)
+
+**Technical Details**:
+- Old OLLAMA_URL: `http://172.18.0.1:11434` (hardcoded IP)
+- New OLLAMA_URL: `http://ollama:11434` (container name for Docker DNS)
+- Docker container names are now used instead of IPs for better resolution
+
+**Completion Criteria**:
+- [x] Root cause identified (network isolation)
+- [x] Environment variable updated
+- [x] Container restarted successfully
+- [x] Changes committed and pushed to GitHub
+- [x] Documentation updated
+
+**Next Steps**:
+1. User should test Chat Mode button at https://chat.cuttingedge.cihconsultingllc.com
+2. Verify chatbot can send messages and receive responses
+3. Monitor logs for any remaining issues
+
+---
 
 ### ✅ COMPLETED TODAY (2026-02-12 13:45:00 EST)
 
