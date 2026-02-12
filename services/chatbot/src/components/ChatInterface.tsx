@@ -21,6 +21,7 @@ interface ChatResponse {
 
 export const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [msgIdCounter, setMsgIdCounter] = useState(0);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -82,13 +83,14 @@ export const ChatInterface: React.FC = () => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    const userMessage = {
-      id: Date.now().toString(),
+    const userMessage: ChatMessage = {
+      id: `${Date.now()}-${msgIdCounter}`,
       role: 'user' as const,
       content: input.trim(),
       timestamp: new Date()
     };
 
+    setMsgIdCounter(prev => prev + 1);
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
@@ -100,12 +102,13 @@ export const ChatInterface: React.FC = () => {
 
       // Add assistant response
       setMessages(prev => [...prev, {
-        id: (Date.now() + 1).toString(),
+        id: `${Date.now()}-${msgIdCounter + 1}`,
         role: 'assistant',
         content: response,
         sources: sources && sources.length > 0 ? sources : undefined,
         timestamp: new Date()
       }]);
+      setMsgIdCounter(prev => prev + 1);
 
     } catch (err) {
       console.error('Chat error:', err);

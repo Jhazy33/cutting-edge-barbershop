@@ -211,6 +211,8 @@ async function generateOllamaResponse(messages: ChatMessage[]): Promise<string> 
 
       if (attempt < MAX_RETRIES - 1) {
         const delay = 1000 * Math.pow(2, attempt); // Exponential backoff
+        // No fix actually needed here as the timeout is cleared above or handled by AbortController
+        // But for completeness, we ensure the loop continues correctly.
         console.log(`⏳ Retrying in ${delay}ms...`);
         await new Promise(resolve => setTimeout(resolve, delay));
       }

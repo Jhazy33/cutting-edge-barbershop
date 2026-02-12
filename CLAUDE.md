@@ -14,8 +14,15 @@
 
 ### Production
 - **Main Website**: https://cuttingedge.cihconsultingllc.com
+- **Chatbot**: https://chat.cuttingedge.cihconsultingllc.com
 - **Direct IP**: https://109.199.118.38
 - **Supabase Studio**: https://supabase.cihconsultingllc.com
+
+### 🎯 Project Documentation
+- **Master Tracker**: `MASTER_TASK_TRACKER.md` ⭐ READ THIS FIRST
+- **Organized Docs**: `docs/` folder (chatbot/, database/, security/, etc.)
+- **Crash Report**: `CLAUDE_CRASH_INVESTIGATION.md`
+- **Separation Status**: `PROJECT_SEPARATION_STATUS.md` (3 projects documented)
 
 ### VPS Access
 - **SSH Command**: `ssh contabo-vps` or `ssh root@109.199.118.38`
