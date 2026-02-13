@@ -68,6 +68,74 @@
 
 ### 🔴 CRITICAL (Today)
 
+#### 12. Chatbot Routing Fix - COMPLETE ✅
+**Created**: 2026-02-12 21:32:00 EST
+**Completed**: 2026-02-12 21:45:00 EST
+**Priority**: CRITICAL
+**Status**: ✅ COMPLETE - ALL FIXES APPLIED & VERIFIED
+**Assigned To**: Claude Code (orchestrator + 3 parallel agents)
+
+**Description**: Fix routing issue where https://chat.cihconsultingllc.com was showing main website instead of chatbot
+
+**Root Cause**:
+- **Nginx configuration not enabled** - `/etc/nginx/sites-available/cuttingedge` had correct config but wasn't symlinked
+- Requests caught by `default_server` directive serving main website
+- Chat Mode link in main site pointed to wrong domain (chat.cuttingedge.cihconsultingllc.com)
+
+**Actions Taken**:
+- [x] Deployed 3 parallel agents (debugger, general-purpose, frontend-specialist)
+- [x] Investigated nginx configuration, DNS, and codebase
+- [x] Created backups of nginx and main site deployment
+- [x] Enabled nginx configuration for chat.cihconsultingllc.com
+- [x] Updated Chat Mode link in main site to use shorter domain
+- [x] Rebuilt and deployed main site to VPS
+- [x] Verified fix working (curl tests passed)
+- [x] Created comprehensive documentation with rollback procedures
+- [x] Committed and pushed changes to GitHub dev branch
+
+**Result**: ✅ https://chat.cihconsultingllc.com now correctly shows chatbot interface
+
+**Files Modified**:
+- `services/main-site/components/FloatingConcierge.tsx` - Updated chat link (line 121)
+- `/etc/nginx/sites-enabled/` - Added symlink to cuttingedge config
+- `CHATBOT_ROUTING_FIX_REPORT.md` - Complete documentation created
+
+**Technical Details**:
+- Old Chat Mode link: `https://chat.cuttingedge.cihconsultingllc.com`
+- New Chat Mode link: `https://chat.cihconsultingllc.com`
+- Nginx proxy: `chat.cihconsultingllc.com` → `127.0.0.1:3001` (chatbot container)
+- SSL certificate: Shared with main site (cuttingedge.cihconsultingllc.com)
+
+**Verification Results**:
+```bash
+# Before fix
+curl https://chat.cihconsultingllc.com
+# Returns: <title>Cutting Edge Barbershop | Plymouth, MA...</title> ❌
+
+# After fix
+curl https://chat.cihconsultingllc.com
+# Returns: <title>Cutting Edge | Digital Concierge</title> ✅
+```
+
+**Backups Created**:
+- `/etc/nginx/backups/nginx-fix-20260212_213215/`
+- `/var/www/cuttingedge.backup-20260212_213342/`
+
+**Completion Criteria**:
+- [x] chat.cihconsultingllc.com serves chatbot interface ✅
+- [x] Chat Mode link points to correct domain ✅
+- [x] No errors in nginx logs ✅
+- [x] SSL certificate working ✅
+- [x] Backups created ✅
+- [x] Rollback procedures documented ✅
+- [x] Changes committed to GitHub ✅
+
+**Documentation**: See `CHATBOT_ROUTING_FIX_REPORT.md` for complete investigation details, rollback procedures, and troubleshooting guide.
+
+**Summary**: Chatbot routing completely fixed. Users can now access the AI Digital Concierge at both https://chat.cihconsultingllc.com (primary) and https://chat.cuttingedge.cihconsultingllc.com (alternate).
+
+---
+
 #### 11. SSL/TLS Security Audit & Fix - COMPLETE ✅
 **Created**: 2026-02-12 14:14:00 EST
 **Completed**: 2026-02-12 14:30:00 EST
