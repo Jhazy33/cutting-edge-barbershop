@@ -1,0 +1,103 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/jhazy/Desktop",
+        "/Users/jhazy/Downloads",
+        "/Users/jhazy/mcp-server",
+        "/Users/jhazy/Library/Application Support/Claude/",
+        "/Users/jhazy/AI_Projects",
+        "/Users/jhazy/AI_Projects/Plaud Voice",
+        "/Users/jhazy/AI_Projects/Requirement Doc Website Files_Intake",
+        "/Users/jhazy/AI_Projects/fantasy-scout-ai",
+        "/Users/jhazy/AI_Projects/RooCode"
+      ]
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "BSA7X8KaGg4horrF7VfdvtvRJttcFQx"
+      }
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
+    },
+    "Context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "mcp-server-firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "fc-a94bf87db73243729204bb4db73236ed"
+      }
+    },
+    "fetch": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@smithery/cli@latest",
+        "run",
+        "fetch-mcp",
+        "--key",
+        "2e64082e-8c88-4a14-8812-e8e1c4f0f457"
+      ]
+    },
+    "ken-you-remember": {
+      "command": "npx",
+      "args": ["-y", "ken-you-remember"],
+      "env": {
+        "MEMORIES_FILE": "/Users/jhazy/Library/Logs/Claude/memories.json"
+      }
+    },
+    "ken-you-think": {
+      "command": "npx",
+      "args": ["-y", "ken-you-think"]
+    },
+    "notion-mcp-server": {
+      "command": "node",
+      "args": [
+        "/Users/jhazy/AI_Projects/Daily Productivity App/notion-mcp-server/server.js"
+      ],
+      "env": {
+        "NOTION_TOKEN": "ntn_y94219182487v7xtnhO6rF5pl9XOJ2Per8yZlNizparezZ"
+      }
+    },
+    "ken8n-mcp": {
+      "command": "npx",
+      "args": ["@kenkaiii/ken8n-mcp"]
+    },
+    "pal": {
+      "command": "/Users/jhazy/AI_Projects/pal-mcp-server/.pal_venv/bin/python",
+      "args": ["/Users/jhazy/AI_Projects/pal-mcp-server/server.py"],
+      "env": {
+        "AZURE_OPENAI_ENDPOINT": "https://your-resource.openai.azure.com/",
+        "DEFAULT_MODEL": "auto",
+        "DEFAULT_THINKING_MODE_THINKDEEP": "high",
+        "CONVERSATION_TIMEOUT_HOURS": "24",
+        "MAX_CONVERSATION_TURNS": "40",
+        "LOG_LEVEL": "DEBUG",
+        "DISABLED_TOOLS": "analyze,refactor,testgen,secaudit,docgen,tracer",
+        "PAL_MCP_FORCE_ENV_OVERRIDE": "false",
+        "COMPOSE_PROJECT_NAME": "pal-mcp",
+        "TZ": "UTC",
+        "LOG_MAX_SIZE": "10MB"
+      }
+    },
+    "notebooklm": {
+      "command": "/opt/anaconda3/bin/notebooklm-mcp",
+      "args": []
+    },
+    "browsermcp": {
+      "command": "npx",
+      "args": ["-y", "@browsermcp/mcp@latest"],
+      "env": {}
+    }
+  }
+}
