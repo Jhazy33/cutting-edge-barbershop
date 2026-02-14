@@ -1,21 +1,19 @@
-'use client';
-
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { ChatMessage } from './types';
+import { ChatMessage as Message } from './types';
 import { User, Bot } from 'lucide-react';
 
 interface ChatMessageProps {
-  message: ChatMessage;
+  message: Message;
 }
 
-const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message }) => {
+const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const isUser = message.role === 'user';
 
   return (
     <div className={`flex w-full mb-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div className={`flex max-w-[85%] md:max-w-[70%] gap-3 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
-
+        
         {/* Avatar */}
         <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
           isUser ? 'bg-indigo-600' : 'bg-red-600'
@@ -25,8 +23,8 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message }) => {
 
         {/* Bubble */}
         <div className={`px-4 py-3 rounded-2xl text-sm md:text-base leading-relaxed shadow-md ${
-          isUser
-            ? 'bg-indigo-600 text-white rounded-tr-none'
+          isUser 
+            ? 'bg-indigo-600 text-white rounded-tr-none' 
             : 'bg-slate-800 text-slate-200 rounded-tl-none border border-slate-700'
         }`}>
           <ReactMarkdown
@@ -49,4 +47,4 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message }) => {
   );
 };
 
-export default ChatMessageComponent;
+export default ChatMessage;

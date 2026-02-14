@@ -1,14 +1,12 @@
-'use client';
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Scissors, Loader2 } from 'lucide-react';
-import { ChatMessage } from './types';
+import { ChatMessage as Message } from './types';
 import { INITIAL_MESSAGE } from './constants';
 import { sendMessageStreamToGemini } from './geminiService';
-import ChatMessageComponent from './ChatMessage';
+import ChatMessage from './ChatMessage';
 
 const ChatInterface: React.FC = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>([
+  const [messages, setMessages] = useState<Message[]>([
     {
       id: 'init-1',
       role: 'model',
@@ -37,7 +35,7 @@ const ChatInterface: React.FC = () => {
   const handleSend = async (): Promise<void> => {
     if (!input.trim() || isLoading) return;
 
-    const userMessage: ChatMessage = {
+    const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
       content: input.trim(),
@@ -78,10 +76,10 @@ const ChatInterface: React.FC = () => {
       setMessages((prev) => [
         ...prev,
         {
-          id: Date.now().toString(),
-          role: 'model',
-          content: "My bad, something disconnected. Try saying that again.",
-          timestamp: Date.now(),
+            id: Date.now().toString(),
+            role: 'model',
+            content: "My bad, something disconnected. Try saying that again.",
+            timestamp: Date.now(),
         }
       ]);
     } finally {
@@ -99,7 +97,8 @@ const ChatInterface: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-900 overflow-hidden relative">
+    <div className="flex flex-col h-[100dvh] w-full max-w-3xl mx-auto bg-black shadow-2xl overflow-hidden relative border-x border-slate-800">
+      
       {/* Header */}
       <header className="bg-slate-900/95 backdrop-blur-sm border-b border-slate-800 p-4 sticky top-0 z-10 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -114,14 +113,17 @@ const ChatInterface: React.FC = () => {
             </div>
           </div>
         </div>
+        <div className="hidden sm:block">
+            <span className="text-xs font-bold text-slate-500 border border-slate-700 px-2 py-1 rounded">EST. 2024</span>
+        </div>
       </header>
 
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-6 scroll-smooth">
         {messages.map((msg) => (
-          <ChatMessageComponent key={msg.id} message={msg} />
+          <ChatMessage key={msg.id} message={msg} />
         ))}
-        {isLoading && messages.length > 0 && messages[messages.length - 1]?.role === 'user' && (
+        {isLoading && messages[messages.length - 1]?.role === 'user' && (
              <div className="flex w-full mb-4 justify-start">
                 <div className="flex max-w-[80%] gap-3 flex-row">
                     <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-red-600">
@@ -166,7 +168,7 @@ const ChatInterface: React.FC = () => {
           </button>
         </div>
         <div className="text-center mt-2">
-            <p className="text-[10px] text-slate-600 uppercase tracking-widest">Powered by Gemini</p>
+            <p className="text-[10px] text-slate-600 uppercase tracking-widest">Powered by Gemini 3 Flash</p>
         </div>
       </div>
     </div>
