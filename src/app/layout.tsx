@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Oswald, Inter } from 'next/font/google'
+import Script from 'next/script'
 import '@/styles/globals.css'
 
 const oswald = Oswald({
@@ -64,8 +65,13 @@ export default function RootLayout({
         />
 
         {/* Tailwind CSS - Required for archived homepage */}
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script
+        <Script
+          src="https://cdn.tailwindcss.com"
+          strategy="beforeInteractive"
+        />
+        <Script
+          id="tailwind-config"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               tailwind.config = {
