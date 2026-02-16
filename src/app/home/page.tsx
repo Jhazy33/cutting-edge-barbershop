@@ -8,11 +8,11 @@ export default function HomePage(): React.JSX.Element {
     const script = document.createElement('script')
     script.type = 'module'
     script.crossOrigin = 'anonymous'
-    script.src = '/index-BIIlsidu.js'
+    script.src = '/assets/index-BIIlsidu.js'
 
     const link = document.createElement('link')
     link.rel = 'stylesheet'
-    link.href = '/index-DvedmyuE.css'
+    link.href = '/assets/index-DvedmyuE.css'
 
     document.head.appendChild(link)
     document.body.appendChild(script)
