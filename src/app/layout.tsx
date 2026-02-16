@@ -53,9 +53,61 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        {/* Google Fonts */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+          rel="stylesheet"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
           rel="stylesheet"
+        />
+
+        {/* Tailwind CSS - Required for archived homepage */}
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                  extend: {
+                    colors: {
+                      primary: "#CC0000",
+                      "background-light": "#F8F8F8",
+                      "background-dark": "#0A0A0A",
+                      "accent-dark": "#1A1A1A",
+                    },
+                    fontFamily: {
+                      display: ["Oswald", "sans-serif"],
+                      sans: ["Inter", "sans-serif"],
+                    },
+                  },
+                },
+              }
+            `,
+          }}
+        />
+
+        {/* Inline styles matching live site */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              body {
+                background-color: #0A0A0A;
+                color: #ffffff;
+              }
+
+              .no-scrollbar::-webkit-scrollbar {
+                display: none;
+              }
+
+              .no-scrollbar {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+              }
+            `,
+          }}
         />
       </head>
       <body className={`${oswald.variable} ${inter.variable} font-sans antialiased`}>
