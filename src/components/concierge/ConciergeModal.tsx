@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { X, MessageCircle, Mic } from 'lucide-react';
 import { ConciergeMode } from './types';
 import ChatInterface from './ChatInterface';
+import VoiceInterface from './VoiceInterface';
 
 interface ConciergeModalProps {
   isOpen: boolean;
@@ -59,7 +60,7 @@ const ConciergeModal: React.FC<ConciergeModalProps> = ({ isOpen, onClose, defaul
         {/* Mode Toggle */}
         <div className="flex items-center justify-center gap-4 p-4 border-b border-slate-800 bg-slate-900/50">
           <button
-            onClick={() => setMode('chat')}
+            onClick={() => window.open('https://chat.cihconsultingllc.com', '_blank')}
             className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
               mode === 'chat'
                 ? 'bg-red-600 text-white shadow-lg shadow-red-900/20'
@@ -70,7 +71,7 @@ const ConciergeModal: React.FC<ConciergeModalProps> = ({ isOpen, onClose, defaul
             <span>Chat</span>
           </button>
           <button
-            onClick={() => setMode('voice')}
+            onClick={() => window.open('https://voice.cihconsultingllc.com', '_blank')}
             className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
               mode === 'voice'
                 ? 'bg-red-600 text-white shadow-lg shadow-red-900/20'
@@ -87,43 +88,7 @@ const ConciergeModal: React.FC<ConciergeModalProps> = ({ isOpen, onClose, defaul
           {mode === 'chat' ? (
             <ChatInterface />
           ) : (
-            <div className="h-full w-full bg-slate-900 flex flex-col items-center justify-center p-8">
-              <div className="text-center mb-8">
-                <div className="w-24 h-24 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-red-900/20">
-                  <Mic className="w-12 h-12 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2">Voice Concierge</h3>
-                <p className="text-slate-400">Coming soon! For now, use our chat interface.</p>
-              </div>
-
-              {/* Visualizer (for demo purposes) */}
-              <div className="w-full max-w-md">
-                <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
-                  <div className="flex items-center justify-center mb-4">
-                    <div className="flex items-end gap-1 h-12">
-                      {Array.from({ length: 20 }).map((_, i: number) => (
-                        <div
-                          key={i}
-                          className="w-1 bg-red-600 rounded-full transition-all duration-75"
-                          style={{
-                            height: `${4 + Math.random() * 44}px`,
-                            opacity: Math.random() * 0.7 + 0.3,
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-center text-sm text-slate-400">Voice visualization demo</p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setMode('chat')}
-                className="mt-8 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-medium transition-colors border border-slate-700"
-              >
-                Switch to Chat Mode
-              </button>
-            </div>
+            <VoiceInterface />
           )}
         </div>
       </div>

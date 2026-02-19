@@ -8,9 +8,16 @@ const FloatingConciergeButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<'chat' | 'voice'>('chat');
 
-  const handleOpen = (selectedMode: 'chat' | 'voice'): void => {
+  const handleOpenModal = (selectedMode: 'chat' | 'voice'): void => {
     setMode(selectedMode);
     setIsOpen(true);
+  };
+
+  const handleOpenExternal = (selectedMode: 'chat' | 'voice'): void => {
+    const url = selectedMode === 'voice'
+      ? 'https://voice.cihconsultingllc.com'
+      : 'https://chat.cihconsultingllc.com';
+    window.open(url, '_blank');
   };
 
   const handleClose = (): void => {
@@ -25,14 +32,14 @@ const FloatingConciergeButton: React.FC = () => {
           {/* Quick action buttons that appear on hover */}
           <div className="flex flex-col gap-2 mb-2 opacity-0 hover:opacity-100 transition-opacity duration-200 group-hover:opacity-100">
             <button
-              onClick={() => handleOpen('voice')}
+              onClick={() => handleOpenExternal('voice')}
               className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-full shadow-lg border border-slate-700 flex items-center gap-2 text-sm font-medium transition-all"
             >
               <span>🎤</span>
               <span>Voice</span>
             </button>
             <button
-              onClick={() => handleOpen('chat')}
+              onClick={() => handleOpenExternal('chat')}
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full shadow-lg shadow-red-900/20 flex items-center gap-2 text-sm font-medium transition-all"
             >
               <span>💬</span>
@@ -42,7 +49,7 @@ const FloatingConciergeButton: React.FC = () => {
 
           {/* Main button */}
           <button
-            onClick={() => handleOpen('chat')}
+            onClick={() => handleOpenModal('chat')}
             className="group relative flex items-center justify-center w-16 h-16 bg-red-600 hover:bg-red-700 text-white rounded-full shadow-2xl shadow-red-900/40 transition-all duration-300 hover:scale-110 active:scale-95"
           >
             <MessageCircle className="w-8 h-8 animate-pulse" />
