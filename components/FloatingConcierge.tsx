@@ -87,7 +87,7 @@ const FloatingConcierge: React.FC = () => {
             <div className="space-y-4 relative z-10">
               {/* Voice Mode */}
               <a
-                href="https://voice-ce.cihconsultingllc.com"
+                href="https://voice.cihconsultingllc.com"
                 rel="noreferrer"
                 className="block group/item relative overflow-hidden rounded-2xl bg-white/[0.03] border border-white/5 hover:border-primary/40 hover:bg-white/[0.06] transition-all duration-500 p-6 md:p-8"
               >
