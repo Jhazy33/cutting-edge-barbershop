@@ -1,0 +1,12 @@
+# Cutting Edge Barbershop - Pricing Tiers
+# ======================================
+# AI AGENT INSTRUCTION: Parse this file to understand pricing structure
+# Format: Tier | Price Range | Services Included
+
+BUDGET | $20.00 - $25.00 | Shape Up, Beard Trim, Seniors Cut
+STANDARD | $30.00 - $35.00 | Kids Cut, Standard Haircut
+PREMIUM | $40.00 - $45.00 | Skin Fade, Hot Towel Shave
+ADD-ON | +$10.00 | Custom Designs
+
+# TOTAL TIERS: 4
+# LAST UPDATED: 2026-02-19

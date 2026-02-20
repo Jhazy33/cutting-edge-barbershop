@@ -7,12 +7,14 @@ const oswald = Oswald({
   subsets: ['latin'],
   variable: '--font-oswald',
   display: 'swap',
+  weight: ['400', '500', '600', '700'],
 })
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
+  weight: ['300', '400', '500', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
     type: 'website',
     title: 'Cutting Edge Barbershop | Plymouth, MA',
     description: 'Precision fades and urban artistry in the heart of Manomet. Book your chair at the #1 rated shop in Plymouth.',
-    url: 'https://ce-vercel.vercel.app',
+    url: 'https://cuttingedge.cihconsultingllc.com',
     images: [
       {
         url: 'https://scontent-bos5-1.xx.fbcdn.net/v/t39.30808-6/273684555_4823755517708758_6897495879521931324_n.jpg',
@@ -52,11 +54,11 @@ export default function RootLayout({
   children: React.ReactNode
 }): React.JSX.Element {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className={`scroll-smooth ${oswald.variable} ${inter.variable}`}>
       <head>
         {/* Google Fonts */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
         <link
@@ -116,7 +118,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${oswald.variable} ${inter.variable} font-sans antialiased`}>
+      <body>
         {children}
       </body>
     </html>

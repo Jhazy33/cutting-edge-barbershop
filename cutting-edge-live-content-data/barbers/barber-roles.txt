@@ -1,0 +1,16 @@
+# Cutting Edge Barbershop - Barber Specialties & Roles
+# =====================================================
+# AI AGENT INSTRUCTION: Parse this file to extract barber specialties
+# Format: Name | Specialty/Role | Description
+
+Paul R. | Lead Talent / High Detail | Precision cuts, artistic designs, attention to detail
+Fast Eddie | Speed King / Fades | Quick fades, efficient service, modern styles
+Kevin | Barber | General barber services
+Bryan | Barber | General barber services
+Cam | Barber | General barber services
+Cody | Barber | General barber services
+Ricky | Master Barber | Genera barber services
+
+# TOTAL BARBERS: 7
+# LAST UPDATED: 2026-02-19
+# SOURCE: Voice app constants (voice-app/src/components/VoiceInterface.tsx)

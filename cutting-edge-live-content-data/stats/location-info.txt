@@ -1,0 +1,26 @@
+# Cutting Edge Barbershop - Location Information
+# ================================================
+# AI AGENT INSTRUCTION: Parse this file to extract business location details
+# Format: Field | Value
+
+Business Name | The Cutting Edge Barbershop
+Alternate Name | Cutting Edge Plymouth
+Established | 2012
+Street Address | 34 Manomet Point Rd
+City | Plymouth
+State | MA
+ZIP Code | 02360
+Area | Manomet Point
+Phone | (508) 224-4408
+
+# HOURS OF OPERATION:
+# Tuesday - Friday: 9:00 AM - 5:00 PM
+# Saturday: 9:00 AM - 5:00 PM
+# Sunday - Monday: Closed
+
+# GEOGRAPHIC COORDINATES (if needed for maps):
+# Lat: 41.9174 (approximate for Manomet Point, Plymouth)
+# Long: -70.6058 (approximate for Manomet Point, Plymouth)
+
+# LAST UPDATED: 2026-02-19
+# SOURCE: Website footer, hero component, Instagram bio

@@ -1,0 +1,13 @@
+# Cutting Edge Barbershop - Social Media Statistics
+# ================================================
+# AI AGENT INSTRUCTION: Parse this file to extract social media metrics
+# Format: Platform | Metric | Value
+
+Instagram | Posts | 62
+Instagram | Followers | 485
+Instagram | Following | 390
+Facebook | Followers | 1K (approximately)
+
+# ENGAGEMENT RATE: Calculate as (likes + comments) / followers * 100
+# LAST UPDATED: 2026-02-19
+# SOURCE: Instagram and Facebook scraped data

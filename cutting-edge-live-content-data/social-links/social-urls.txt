@@ -1,0 +1,12 @@
+# Cutting Edge Barbershop - Social Media URLs
+# ===========================================
+# AI AGENT INSTRUCTION: Parse this file to extract social media links
+# Format: Platform | URL | Handle/Name
+
+Instagram | https://www.instagram.com/cutting_edge_barbershop/ | @cutting_edge_barbershop
+Facebook | https://www.facebook.com/p/The-Cutting-Edge-Plymouth-100054632881924/ | The Cutting Edge Plymouth
+Yelp | https://www.yelp.com/biz/the-cutting-edge-plymouth-2 | The Cutting Edge
+
+# TOTAL PLATFORMS: 3
+# LAST UPDATED: 2026-02-19
+# SOURCE: Scraped social media profiles

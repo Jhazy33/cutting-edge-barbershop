@@ -1,50 +1,38 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(_request: NextRequest): NextResponse {
-  const response = NextResponse.next()
+export function middleware(request: NextRequest): NextResponse {
+  const url = request.nextUrl
 
-  // Content Security Policy
-  response.headers.set(
-    'Content-Security-Policy',
-    "default-src 'self'; " +
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline'; " +
-      "style-src 'self' 'unsafe-inline'; " +
-      "img-src 'self' data: https:; " +
-      "font-src 'self' data:; " +
-      "connect-src 'self'; " +
-      "frame-ancestors 'none'; " +
-      "base-uri 'self'; " +
-      "form-action 'self'"
-  )
+  // Check for voice subdomain
+  const host = request.headers.get('host') || ''
 
-  // X-Frame-Options
-  response.headers.set('X-Frame-Options', 'DENY')
+  console.log('🔍 Middleware called:', { host, pathname: url.pathname })
 
-  // X-Content-Type-Options
-  response.headers.set('X-Content-Type-Options', 'nosniff')
+  // Check ALL headers that might contain the hostname
+  const xForwardedHost = request.headers.get('x-forwarded-host') || ''
+  const xOriginalHost = request.headers.get('x-original-host') || ''
 
-  // Referrer-Policy
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  const isVoiceDomain =
+    host.includes('voice.cihconsultingllc.com') ||
+    host.includes('voice-ce.cihconsultingllc.com') ||
+    xForwardedHost.includes('voice.cihconsultingllc.com') ||
+    xForwardedHost.includes('voice-ce.cihconsultingllc.com') ||
+    xOriginalHost.includes('voice.cihconsultingllc.com')
 
-  // X-DNS-Prefetch-Control
-  response.headers.set('X-DNS-Prefetch-Control', 'off')
+  if (isVoiceDomain && url.pathname === '/') {
+    console.log('✅ Voice domain + root path detected - rewriting to /voice')
+    url.pathname = '/voice'
+    return NextResponse.rewrite(url)
+  }
 
-  // Strict-Transport-Security (HSTS)
-  response.headers.set(
-    'Strict-Transport-Security',
-    'max-age=31536000; includeSubDomains; preload'
-  )
-
-  // Permissions-Policy
-  response.headers.set(
-    'Permissions-Policy',
-    'camera=(), microphone=(), geolocation=(), payment=()'
-  )
-
-  return response
+  console.log('⏭️ Not a voice domain request - passing through')
+  return NextResponse.next()
 }
 
+// Run middleware on all routes except static assets
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
 }

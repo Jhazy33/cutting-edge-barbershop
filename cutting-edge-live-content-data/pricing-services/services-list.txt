@@ -1,0 +1,19 @@
+# Cutting Edge Barbershop - Services & Pricing
+# ============================================
+# AI AGENT INSTRUCTION: Parse this file to extract services
+# Format: ID | Service Name | Price | Duration | Description
+# Delimiter: |
+
+1 | Standard Haircut | $35.00 | 30 Mins | Classic cut or fade. Includes hot lather neck shave and styling.
+2 | Skin Fade | $40.00 | 45 Mins | Precision zero/bald fade with foil shaver finish for the cleanest look.
+3 | Kids Cut | $30.00 | 30 Mins | Specialized patience and style for the little legends (12 & under).
+4 | Seniors (65+) | $25.00 | 30 Mins | Traditional gentleman's grooming at a respectable rate.
+5 | Beard Trim | $20.00 | 15 Mins | Sculpting, lining, and length reduction to keep it sharp.
+6 | Shape Up / Line Up | $20.00 | 15 Mins | Crisp edge-up around the ears and neck only. No length taken off.
+7 | Hot Towel Shave | $45.00 | 45 Mins | Old school luxury. Hot towels, straight razor, and post-shave treatment.
+8 | Custom Designs | +$10.00 | Add-on | Artistic freestyle designs added to any haircut service.
+
+# TOTAL SERVICES: 8
+# PRICE RANGE: $20.00 - $45.00 (plus add-ons)
+# LAST UPDATED: 2026-02-19
+# SOURCE: constants.ts from main website

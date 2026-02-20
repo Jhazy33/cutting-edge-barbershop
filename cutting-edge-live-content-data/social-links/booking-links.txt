@@ -1,0 +1,14 @@
+# Cutting Edge Barbershop - Booking Platforms
+# ============================================
+# AI AGENT INSTRUCTION: Parse this file to extract booking links
+# Format: Platform | URL | Type
+
+Squire | https://getsquire.com/discover/barbershop/cutting-edge-plymouth | Primary Booking Platform
+
+# NOTES:
+# - Squire is the primary booking platform for appointments
+# - Direct phone booking available: (508) 224-4408
+# - Walk-ins welcome based on availability
+
+# LAST UPDATED: 2026-02-19
+# SOURCE: constants.ts and website footer

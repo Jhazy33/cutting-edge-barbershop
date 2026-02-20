@@ -1,0 +1,17 @@
+# Cutting Edge Barbershop - Barber Names
+# ======================================
+# AI AGENT INSTRUCTION: Parse this file to extract barber names
+# Each line contains one barber name
+# Format: First Last (Nickname if applicable)
+
+Paul R. (Paulie)
+Fast Eddie
+Kevin
+Bryan
+Cam
+Cody
+Ricky
+
+# TOTAL BARBERS: 7
+# LAST UPDATED: 2026-02-19
+# SOURCE: Instagram bio & voice app constants
