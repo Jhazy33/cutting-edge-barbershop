@@ -88,7 +88,8 @@ with open('barber-roles.txt', 'r') as f:
 4. Bryan - Barber
 5. Cam - Barber
 6. Cody - Barber
-7. Ricky - Master Barber
+7. Ricky - Master Barberccd
+
 
 ---
 

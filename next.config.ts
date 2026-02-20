@@ -21,16 +21,6 @@ const nextConfig: NextConfig = {
         ],
         destination: '/voice',
       },
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'voice-ce.cihconsultingllc.com',
-          },
-        ],
-        destination: '/voice',
-      },
     ]
   },
 }

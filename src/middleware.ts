@@ -15,9 +15,7 @@ export function middleware(request: NextRequest): NextResponse {
 
   const isVoiceDomain =
     host.includes('voice.cihconsultingllc.com') ||
-    host.includes('voice-ce.cihconsultingllc.com') ||
     xForwardedHost.includes('voice.cihconsultingllc.com') ||
-    xForwardedHost.includes('voice-ce.cihconsultingllc.com') ||
     xOriginalHost.includes('voice.cihconsultingllc.com')
 
   if (isVoiceDomain && url.pathname === '/') {

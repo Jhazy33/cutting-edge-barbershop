@@ -10,7 +10,7 @@ export default function HomePage(): React.JSX.Element {
     // Check if accessing via voice subdomain
     const hostname = window.location.hostname
 
-    if (hostname.includes('voice.cihconsultingllc.com') || hostname.includes('voice-ce.cihconsultingllc.com')) {
+    if (hostname.includes('voice.cihconsultingllc.com')) {
       // Immediate redirect to /voice
       window.location.href = '/voice'
     } else {
