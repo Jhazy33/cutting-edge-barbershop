@@ -109,7 +109,7 @@ const FloatingConcierge: React.FC = () => {
 
               {/* Chat Mode */}
               <a
-                href="https://chat.cuttingedge.cihconsultingllc.com"
+                href="https://chat.cihconsultingllc.com"
                 rel="noreferrer"
                 className="block group/item relative overflow-hidden rounded-2xl bg-white/[0.03] border border-white/5 hover:border-primary/40 hover:bg-white/[0.06] transition-all duration-500 p-6 md:p-8"
               >
