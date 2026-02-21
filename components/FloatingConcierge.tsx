@@ -17,7 +17,7 @@ const FloatingConcierge: React.FC = () => {
         >
           <div className="text-left mr-2">
             <p className="text-[10px] text-slate-400 uppercase tracking-[0.2em] leading-none mb-1.5">Need Help?</p>
-            <p className="font-display font-bold uppercase tracking-widest leading-none text-sm">Concierge</p>
+            <p className="font-display font-bold uppercase tracking-widest leading-none text-sm">Digital Client</p>
           </div>
           <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(204,0,0,0.4)] group-hover:shadow-[0_0_30px_rgba(204,0,0,0.6)] transition-all">
             <img
@@ -80,7 +80,7 @@ const FloatingConcierge: React.FC = () => {
                   className="w-40 h-40 object-contain brightness-0 invert"
                 />
               </div>
-              <h3 className="font-display text-4xl md:text-5xl text-white uppercase font-bold tracking-[0.1em] mb-3">Digital Concierge</h3>
+              <h3 className="font-display text-4xl md:text-5xl text-white uppercase font-bold tracking-[0.1em] mb-3">Digital Client</h3>
               <p className="text-slate-400 text-base font-light tracking-wide">Choose your preferred way to connect.</p>
             </div>
 
@@ -109,7 +109,7 @@ const FloatingConcierge: React.FC = () => {
 
               {/* Chat Mode */}
               <a
-                href="https://chat-ce.cihconsultingllc.com"
+                href="https://chat.cihconsultingllc.com"
                 rel="noreferrer"
                 className="block group/item relative overflow-hidden rounded-2xl bg-white/[0.03] border border-white/5 hover:border-primary/40 hover:bg-white/[0.06] transition-all duration-500 p-6 md:p-8"
               >
@@ -120,7 +120,7 @@ const FloatingConcierge: React.FC = () => {
                     </div>
                     <div className="text-left">
                       <h4 className="text-white text-xl font-bold uppercase tracking-widest mb-1 group-hover/item:text-primary transition-colors">Chat Mode</h4>
-                      <p className="text-slate-500 text-sm group-hover/item:text-slate-300 transition-colors">Text with our 24/7 Digital Assistant.</p>
+                      <p className="text-slate-500 text-sm group-hover/item:text-slate-300 transition-colors">Text with our 24/7 Digital Assistant</p>
                     </div>
                   </div>
                   <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover/item:border-primary/50 group-hover/item:bg-primary/10 transition-all">

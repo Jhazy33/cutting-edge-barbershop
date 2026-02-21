@@ -1,0 +1,297 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                  DOCKER NETWORK ARCHITECTURE DIAGRAM                         ║
+║                    Current State - February 11, 2026                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         VPS: 109.199.118.38                                │
+│                          Docker Host Machine                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                    ┌─────────────────┴─────────────────┐
+                    │                                   │
+            ┌───────▼────────┐               ┌──────────▼──────────┐
+            │   Host         │               │   Docker Daemon    │
+            │   Network      │               │   (7 Networks)     │
+            │   (bridge)     │               │                     │
+            │  172.17.0.0/16 │               │                     │
+            └───────┬────────┘               │                     │
+                    │                        │                     │
+                    │ EMPTY                  │                     │
+                    │ (No containers)        │                     │
+                    │                        │                     │
+                    │                        │                     │
+                    │    ┌───────────────────┤                     │
+                    │    │                   │                     │
+                    │    │    ╔══════════════════════════════════════════╗
+                    │    │    ║ NETWORK: cutting-edge_default          ║
+                    │    │    ║ Subnet: 172.18.0.0/16                   ║
+                    │    │    ╠═══════════════════════════════════════════╣
+                    │    │    ║                                         ║
+                    │    │    ║  ┌───────────────────────────────────┐  ║
+                    │    │    ║  │ cutting-edge_chatbot_1            │  ║
+                    │    │    ║  │ IP: 172.18.0.5                    │  ║
+                    │    │    ║  │ Port: 80 (nginx)                  │  ║
+                    │    │    ║  │ STATUS: BROKEN PROXY CONFIG ❌    │  ║
+                    │    │    ║  │                                   │  ║
+                    │    │    ║  │ nginx config:                    │  ║
+                    │    │    ║  │ proxy_pass 172.17.0.1:3000 ❌   │  ║
+                    │    │    ║  │ (should be: handoff-api:3000)    │  ║
+                    │    │    ║  └───────────────────────────────────┘  ║
+                    │    │    ║            │                            ║
+                    │    │    ║            │ ❌ CAN'T CONNECT           ║
+                    │    │    ║            ↓                            ║
+                    │    │    ║  ┌───────────────────────────────────┐  ║
+                    │    │    ║  │ cutting-edge-handoff-api          │  ║
+                    │    │    ║  │ IP: 172.18.0.6                    │  ║
+                    │    │    ║  │ Port: 3000 (Hono/Node.js)        │  ║
+                    │    │    ║  │ STATUS: Multi-homed ⭐            │  ║
+                    │    │    ║  └───────────────────────────────────┘  ║
+                    │    │    ╚═══════════════════════════════════════════╝
+                    │    │
+                    │    │
+                    │    │    ╔══════════════════════════════════════════╗
+                    │    │    ║ NETWORK: fabricaio_fabricaio_net        ║
+                    │    │    ║ Subnet: 172.20.0.0/16                   ║
+                    │    │    ╠═══════════════════════════════════════════╣
+                    │    │    ║                                         ║
+                    │    │    ║  ┌───────────────────────────────────┐  ║
+                    │    │    ║  │ 63d7d8f23bef_fabric_ollama         │  ║
+                    │    │    ║  │ IP: 172.20.0.4                    │  ║
+                    │    │    ║  │ Port: 11434 (Ollama API)         │  ║
+                    │    │    ║  │ Aliases: fabric_ollama, ollama    │  ║
+                    │    │    ║  │ STATUS: RUNNING ✅                 │  ║
+                    │    │    ║  │ Models: llama3.2:3b, gemma:2b     │  ║
+                    │    │    ║  └───────────────────────────────────┘  ║
+                    │    │    ║            ▲                            ║
+                    │    │    ║            │ ✅ CONNECTS               ║
+                    │    │    ║            │                            ║
+                    │    │    ║  ┌───────────────────────────────────┐  ║
+                    │    │    ║  │ cutting-edge-handoff-api          │  ║
+                    │    │    ║  │ IP: 172.20.0.7 (also here!)       │  ║
+                    │    │    ║  │ STATUS: Multi-homed ⭐            │  ║
+                    │    │    ║  │                                   │  ║
+                    │    │    ║  │ OLLAMA_URL (runtime):             ║
+                    │    │    ║  │ http://63d7d8f23bef_fabric_ollama ║
+                    │    │    ║  │     :11434 ✅ WORKS               ║
+                    │    │    ║  │                                   │  ║
+                    │    │    ║  │ Can reach Ollama as:              ║
+                    │    │    ║  │ - http://ollama:11434 ✅          ║
+                    │    │    ║  │ - http://172.20.0.4:11434 ✅      ║
+                    │    │    ║  └───────────────────────────────────┘  ║
+                    │    │    ╚═══════════════════════════════════════════╝
+                    │    │
+                    │    │    ╔══════════════════════════════════════════╗
+                    │    │    ║ NETWORK: supabase_default               ║
+                    │    │    ║ Subnet: 172.22.0.0/16                   ║
+                    │    │    ╠═══════════════════════════════════════════╣
+                    │    │    ║  supabase-db, supabase-studio, etc.     ║
+                    │    │    ║  (11 supabase containers)              ║
+                    │    │    ║                                         ║
+                    │    │    ║  ┌───────────────────────────────────┐  ║
+                    │    │    ║  │ cutting-edge-handoff-api          │  ║
+                    │    │    ║  │ IP: 172.22.0.12 (3rd network!)    │  ║
+                    │    │    ║  │ STATUS: Multi-homed ⭐            ║
+                    │    │    ║  │ (Why? Can access Supabase easily)  │  ║
+                    │    │    ║  └───────────────────────────────────┘  ║
+                    │    │    ╚═══════════════════════════════════════════╝
+                    │    │
+                    │    │    ╔══════════════════════════════════════════╗
+                    │    │    ║ NETWORK: nexxt_whatsgoingon_nexxt-network║
+                    │    │    ║ nexxt-web, nexxt-brain, nexxt-redis...    ║
+                    │    │    ╚═══════════════════════════════════════════╝
+                    │    │
+                    │    │    ╔══════════════════════════════════════════╗
+                    │    │    ║ NETWORK: b0t_b0t-network                ║
+                    │    │    ║ b0t container only                      ║
+                    │    │    ╚═══════════════════════════════════════════╝
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          CONNECTION FLOW                                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+User Request
+    │
+    ▼
+┌─────────────────────────────────────────────────────────────┐
+│ Browser: https://chat.cuttingedge.cihconsultingllc.com      │
+└─────────────────────────────────────────────────────────────┘
+    │
+    ▼ (via Nginx proxy)
+┌─────────────────────────────────────────────────────────────┐
+│ cutting-edge_chatbot_1 (172.18.0.5)                         │
+│ Static frontend served on port 80                           │
+└─────────────────────────────────────────────────────────────┘
+    │
+    │ User types message
+    ▼
+┌─────────────────────────────────────────────────────────────┐
+│ Chatbot makes POST /api/chat request to nginx               │
+└─────────────────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────────────────┐
+│ Chatbot nginx config:                                       │
+│ proxy_pass http://172.17.0.1:3000/api/ ❌                   │
+│                                                             │
+│ ERROR: Nothing listening on 172.17.0.1:3000!               │
+│ The bridge network is EMPTY!                                │
+└─────────────────────────────────────────────────────────────┘
+    │
+    │ Connection refused (111)
+    ▼
+❌ FAILS - User sees error
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    WHAT SHOULD HAPPEN (Fixed)                                 ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+User Request → Chatbot → nginx (proxy_pass) → handoff-api → Ollama → Response
+
+FIXED Chatbot nginx config:
+    location /api/ {
+        proxy_pass http://cutting-edge-handoff-api:3000/api/; ✅
+        # Docker DNS resolves this to 172.18.0.6:3000
+    }
+
+OR:
+
+    location /api/ {
+        proxy_pass http://172.18.0.6:3000/api/; ✅
+        # Use direct IP address
+    }
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      HANDOFF-API MULTI-HOMED DESIGN                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│               cutting-edge-handoff-api (The Hub)                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  Network 1: cutting-edge_default  (172.18.0.6)                         │
+│    ├─ Receives chat requests from chatbot (via proxy)                  │
+│    └─ Can reach all cutting-edge services                              │
+│                                                                         │
+│  Network 2: fabricaio_fabricaio_net  (172.20.0.7)                      │
+│    ├─ Can reach Ollama at 172.20.0.4 ✅                                │
+│    ├─ Can reach fabric_db, fabric_redis, etc.                          │
+│    └─ Uses Ollama for LLM responses                                     │
+│                                                                         │
+│  Network 3: supabase_default  (172.22.0.12)                             │
+│    ├─ Can reach Supabase directly                                      │
+│    ├─ Can reach supabase-db, supabase-studio, etc.                     │
+│    └─ Stores embeddings in pgvector                                    │
+│                                                                         │
+│  WHY THIS DESIGN:                                                       │
+│  ✓ handoff-api is the "integration layer"                              │
+│  ✓ Connects cutting-edge app to fabricaio AI services                   │
+│  ✓ Connects cutting-edge app to Supabase database                     │
+│  ✓ All networks reachable without host routing                        │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          ENVIRONMENT VARIABLES                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+File: /root/cutting-edge/cutting-edge-handoff-api/.env
+    OLLAMA_URL=http://172.17.0.1:11434  ❌ WRONG
+
+Docker Compose: /root/NeXXT_WhatsGoingOn/services/handoff-api/docker-compose.yml
+    environment:
+      - OLLAMA_URL=http://63d7d8f23bef_fabric_ollama:11434  ✅ CORRECT
+
+Runtime (inside container):
+    $ docker exec cutting-edge-handoff-api printenv | grep OLLAMA
+    OLLAMA_URL=http://63d7d8f23bef_fabric_ollama:11434  ✅ WORKING
+
+CONCLUSION: Docker compose override works, but .env file is misleading!
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         QUICK FIX SUMMARY                                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Problem: Chatbot can't connect to handoff-api
+Reason:  nginx proxy points to empty bridge network (172.17.0.1:3000)
+
+Fix:     Change chatbot nginx proxy_pass to use Docker DNS or correct IP
+
+File:    /root/cutting-edge/AI Chatbot/cutting-edge---digital-concierge/nginx.conf
+
+Change:  proxy_pass http://172.17.0.1:3000/api/
+To:      proxy_pass http://cutting-edge-handoff-api:3000/api/
+
+Test:    docker exec cutting-edge_chatbot_1 \
+             wget -qO- http://cutting-edge-handoff-api:3000/api/health
+
+Result:  Should return 200 OK instead of connection refused
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      VERIFICATION COMMANDS                                   ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+# Check which containers are on which networks
+docker network inspect fabricaio_fabricaio_net --format '{{json .Containers}}' | jq .
+
+# Check handoff-api IP addresses (should see 3)
+docker inspect cutting-edge-handoff-api --format '{{range .NetworkSettings.Networks}}{{.IPAddress}} {{.NetworkID}}{{println}}{{end}}'
+
+# Test connectivity from chatbot to handoff-api (will fail before fix)
+docker exec cutting-edge_chatbot_1 wget -qO- http://172.17.0.1:3000/api/health
+
+# Test connectivity from chatbot to handoff-api (should work after fix)
+docker exec cutting-edge_chatbot_1 wget -qO- http://cutting-edge-handoff-api:3000/api/health
+
+# Test connectivity from handoff-api to Ollama (should work now)
+docker exec cutting-edge-handoff-api wget -qO- http://63d7d8f23bef_fabric_ollama:11434/api/tags
+
+# Test full chat flow after fix
+curl -X POST https://chat.cuttingedge.cihconsultingllc.com/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Test message"}'
+
+# Check logs for errors
+docker logs cutting-edge_chatbot_1 --tail 50 | grep -i error
+docker logs cutting-edge-handoff-api --tail 50 | grep -i error
+docker logs 63d7d8f23bef_fabric_ollama --tail 50
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          KEY INSIGHTS                                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+1. OLLAMA IS WORKING FINE - Handoff-api can connect to Ollama successfully
+2. CHATBOT IS THE PROBLEM - nginx proxy points to wrong IP address
+3. BRIDGE NETWORK IS EMPTY - 172.17.0.1 has no containers listening
+4. MULTI-HOMED DESIGN IS ACTUALLY GOOD - Allows inter-app communication
+5. FIX IS SIMPLE - One line change in chatbot nginx config
+
+The "3rd-4th occurrence" of connection issues is likely because:
+- Someone rebuilds containers without preserving network config
+- nginx config hardcoded to 172.17.0.1 instead of using Docker DNS
+- Bridge network IP addresses change on restart
+- Using hard IPs instead of service names
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                     BEST PRACTICE RECOMMENDATIONS                             ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+1. ALWAYS use Docker DNS names (service names) in configs
+   - ✅ http://cutting-edge-handoff-api:3000
+   - ❌ http://172.17.0.1:3000
+
+2. NEVER hard-code IP addresses from docker inspect
+   - IPs change when containers restart
+   - DNS names stay consistent
+
+3. Use extra_hosts for host access if needed
+   - extra_hosts:
+     - "host.docker.internal:host-gateway"
+
+4. Document multi-network attachments
+   - Comment WHY a container needs multiple networks
+   - Helps future debugging
+
+5. Test connectivity after changes
+   - docker exec <container> wget <url>
+   - Verify before declaring "fixed"
