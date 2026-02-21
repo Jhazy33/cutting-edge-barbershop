@@ -56,14 +56,15 @@ const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || '';
  * @param shopId - Shop identifier (default: 1)
  * @returns Promise with barber schedule data
  */
-export async function getShopSchedule(shopId: number = 1): Promise<ScheduleResponse> {
+export async function getShopSchedule(shopId: number = 1, date?: string): Promise<ScheduleResponse> {
   try {
-    const response = await fetch(`${BACKEND_API_URL}/api/schedule?shopId=${shopId}`);
+    const queryParams = `shopId=${shopId}${date ? `&date=${date}` : ''}`;
+    const response = await fetch(`${BACKEND_API_URL}/api/schedule?${queryParams}`);
 
     if (!response.ok) {
       console.warn(`Backend API unavailable (${response.status}), using mock data`);
       // Return mock data when backend is not available
-      return getMockSchedule();
+      return getMockSchedule(date);
     }
 
     const data: ScheduleResponse = await response.json();
@@ -71,46 +72,77 @@ export async function getShopSchedule(shopId: number = 1): Promise<ScheduleRespo
   } catch (error) {
     console.warn('Error fetching shop schedule, using mock data:', error);
     // Return mock data when backend fails
-    return getMockSchedule();
+    return getMockSchedule(date);
   }
 }
 
+import { isPastTime, INITIAL_BARBERS } from '../components/concierge/constants';
+
 /**
  * Get mock schedule data for testing without backend
+ * Simulates different schedules based on the chosen date.
  */
-function getMockSchedule(): ScheduleResponse {
-  return {
-    schedule: [
-      {
-        barber: "Paul R.",
-        status: "WORKING",
-        specialty: "Lead Talent / High Detail",
-        slots: [
-          { time: "9:00 AM", status: "AVAILABLE" },
-          { time: "10:00 AM", status: "AVAILABLE" },
-          { time: "11:00 AM", status: "AVAILABLE" },
-          { time: "1:00 PM", status: "AVAILABLE" },
-          { time: "2:00 PM", status: "AVAILABLE" },
-          { time: "3:00 PM", status: "AVAILABLE" },
-          { time: "4:00 PM", status: "AVAILABLE" },
-        ]
-      },
-      {
-        barber: "Fast Eddie",
-        status: "WORKING",
-        specialty: "Speed King / Fades",
-        slots: [
-          { time: "9:00 AM", status: "AVAILABLE" },
-          { time: "10:00 AM", status: "BOOKED (UNAVAILABLE)", bookedBy: "John D." },
-          { time: "11:00 AM", status: "AVAILABLE" },
-          { time: "1:00 PM", status: "AVAILABLE" },
-          { time: "2:00 PM", status: "AVAILABLE" },
-          { time: "3:00 PM", status: "BOOKED (UNAVAILABLE)", bookedBy: "Mike S." },
-          { time: "4:00 PM", status: "AVAILABLE" },
-        ]
-      }
-    ]
+function getMockSchedule(dateStr?: string): ScheduleResponse {
+  // If a date is provided, check what day of the week it is
+  let dayOfWeek = -1;
+  const todayEST = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date());
+  const targetDate = dateStr || todayEST;
+
+  if (targetDate) {
+    const d = new Date(targetDate + "T12:00:00Z"); // middle of day to avoid timezone shift back
+    dayOfWeek = d.getDay(); // 0 = Sun, 1 = Mon ... 6 = Sat
+  }
+
+  // Create base dynamic schedule from INITIAL_BARBERS to ensure the whole roster is accounted for
+  const schedule: ScheduleResponse = {
+    schedule: INITIAL_BARBERS.map(b => ({
+      barber: b.name,
+      status: b.isWorking ? "WORKING" : "OFF DUTY (UNAVAILABLE TODAY)",
+      specialty: b.specialty,
+      slots: b.schedule.map(s => {
+        const slot: any = {
+          time: s.time,
+          status: s.isBooked ? "BOOKED (UNAVAILABLE)" : "AVAILABLE"
+        };
+        if (s.bookedBy) {
+          slot.bookedBy = s.bookedBy;
+        }
+        return slot;
+      })
+    }))
   };
+
+  // Apply day-based closures. The shop is completely closed on Sundays (0) and Mondays (1).
+  if (dayOfWeek === 0 || dayOfWeek === 1) {
+    schedule.schedule.forEach(barber => {
+      barber.status = "OFF DUTY (SHOP CLOSED)" as any;
+      barber.slots.forEach(s => s.status = "BOOKED (UNAVAILABLE)");
+    });
+  } else {
+    // Other specific days off for specific barbers
+    // Fast Eddie is off on Tuesdays (day 2)
+    if (dayOfWeek === 2) {
+      const eddie = schedule.schedule.find(b => b.barber === "Fast Eddie");
+      if (eddie) {
+        eddie.status = "OFF DUTY (UNAVAILABLE TODAY)";
+        eddie.slots.forEach(s => s.status = "BOOKED (UNAVAILABLE)");
+      }
+    }
+  }
+
+  // Automatically mark past times as booked ONLY IF the date is exactly today in EST
+  if (targetDate === todayEST) {
+    schedule.schedule.forEach(barber => {
+      barber.slots.forEach(slot => {
+        if (slot.status === 'AVAILABLE' && isPastTime(slot.time, targetDate)) {
+          slot.status = 'BOOKED (UNAVAILABLE)';
+          slot.bookedBy = 'Past Time';
+        }
+      });
+    });
+  }
+
+  return schedule;
 }
 
 /**
@@ -181,7 +213,7 @@ export async function handleVoiceToolCall(
 ): Promise<any> {
   switch (toolName) {
     case 'get_shop_schedule':
-      return await getShopSchedule(args.shopId || 1);
+      return await getShopSchedule(args.shopId || 1, args.date);
 
     case 'book_appointment':
       return await bookAppointment({
@@ -191,6 +223,9 @@ export async function handleVoiceToolCall(
         phoneNumber: args.phoneNumber,
         shopId: args.shopId || 1,
       });
+
+    case 'update_barber_status_override':
+      return { success: true, message: 'Barber status overridden by manager.' };
 
     default:
       throw new Error(`Unknown tool: ${toolName}`);

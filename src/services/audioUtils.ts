@@ -31,12 +31,42 @@ export function arrayBufferToBase64(buffer: ArrayBuffer): string {
   return btoa(binary);
 }
 
+// Simple downsampler
+export function downsampleBuffer(buffer: Float32Array, sampleRate: number, outSampleRate: number): Float32Array {
+  if (sampleRate === outSampleRate) {
+    return buffer;
+  }
+  const sampleRateRatio = sampleRate / outSampleRate;
+  const newLength = Math.round(buffer.length / sampleRateRatio);
+  const result = new Float32Array(newLength);
+  let offsetResult = 0;
+  let offsetBuffer = 0;
+  while (offsetResult < result.length) {
+    const nextOffsetBuffer = Math.round((offsetResult + 1) * sampleRateRatio);
+    let accum = 0;
+    let count = 0;
+    for (let i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i++) {
+      accum += buffer[i] ?? 0;
+      count++;
+    }
+    result[offsetResult] = count > 0 ? accum / count : 0;
+    offsetResult++;
+    offsetBuffer = nextOffsetBuffer;
+  }
+  return result;
+}
+
 export function createPcmBlob(data: Float32Array, sampleRate: number = 16000): Blob {
-  const pcm16 = floatTo16BitPCM(data);
+  // Gemini Live API usually requires 16000Hz or 24000Hz exactly.
+  // We force downsample to 16000Hz to ensure maximum compatibility.
+  const targetSampleRate = 16000;
+  const processedData = downsampleBuffer(data, sampleRate, targetSampleRate);
+
+  const pcm16 = floatTo16BitPCM(processedData);
   const uint8 = new Uint8Array(pcm16);
   return {
     data: arrayBufferToBase64(uint8.buffer),
-    mimeType: `audio/pcm;rate=${sampleRate}`,
+    mimeType: `audio/pcm;rate=${targetSampleRate}`,
   };
 }
 
@@ -47,7 +77,6 @@ export async function decodeAudioData(
   numChannels: number = 1
 ): Promise<AudioBuffer> {
   // Guard: Int16Array requires a multiple of 2 bytes.
-  // If we receive an odd number of bytes, we slice off the last byte.
   if (data.byteLength % 2 !== 0) {
     data = data.subarray(0, data.byteLength - 1);
   }

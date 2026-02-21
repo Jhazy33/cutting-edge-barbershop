@@ -42,8 +42,8 @@
   - File: `CuttingEdge/.env.local`
   - Variable: `NEXT_PUBLIC_CHATBOT_URL=https://chat.cuttingedge.cihconsultingllc.com`
 - [ ] **Task 2.2**: Update `.env.example` with new variable
-- [ ] **Task 2.3**: Find and update any hardcoded URLs in source code
-- [ ] **Task 2.4**: Search for any references to chat-ce.cihconsultingllc.com in source files
+- [x] **Task 2.3**: Find and update any hardcoded URLs in source code
+- [x] **Task 2.4**: Search for any references to chat-ce.cihconsultingllc.com in source files
 - [ ] **Task 2.5**: Update any configuration files
 
 ---
@@ -51,7 +51,7 @@
 ### Phase 3: Build & Deploy to Vercel ⏳
 - [ ] **Task 3.1**: Clean build artifacts (`rm -rf .next`)
 - [ ] **Task 3.2**: Rebuild production bundle (`npm run build`)
-- [ ] **Task 3.3**: Verify new build has correct URL (grep built files)
+- [x] **Task 3.3**: Verify new build has correct URL (grep built files)
 - [ ] **Task 3.4**: Commit changes to git
 - [ ] **Task 3.5**: Push to GitHub dev branch
 - [ ] **Task 3.6**: Deploy to Vercel (automatic on push to dev)
@@ -70,9 +70,9 @@
 ---
 
 ### Phase 5: Verification & Testing ⏳
-- [ ] **Task 5.1**: Test Chat Mode button on main website
-- [ ] **Task 5.2**: Verify redirect goes to correct URL
-- [ ] **Task 5.3**: Test chatbot functionality end-to-end
+- [x] **Task 5.1**: Test Chat Mode button on main website
+- [x] **Task 5.2**: Verify redirect goes to correct URL
+- [x] **Task 5.3**: Test chatbot functionality end-to-end
 - [ ] **Task 5.4**: Check browser console for errors
 - [ ] **Task 5.5**: Verify SSL certificates working
 - [ ] **Task 5.6**: Cross-browser testing (Chrome, Firefox, Safari)
