@@ -84,15 +84,17 @@ export const VoiceInterface: React.FC = () => {
     }
   };
 
+
+
   return (
     <div className="h-full w-full bg-background-dark flex flex-col pt-4">
       {/* Top Navigation Header */}
       <header className="flex-none bg-background-dark px-6 mb-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
           {/* Left: Logo and Title */}
           <div className="flex items-center gap-4">
-            <div className="bg-slate-800/50 backdrop-blur rounded-xl px-6 py-3 border border-slate-700 flex flex-col items-start justify-center">
-              <img src="https://i.imgur.com/2ZDJu9w.png" alt="Cutting Edge Barbershop" className="h-10 w-auto object-contain opacity-90 brightness-0 invert mb-2" />
+            <div className="bg-slate-800/50 backdrop-blur rounded-xl px-4 py-2 border border-slate-700 flex flex-col items-center justify-center">
+              <img src="https://i.imgur.com/2ZDJu9w.png" alt="Cutting Edge Barbershop" className="h-[50px] w-[250px] object-contain opacity-90 brightness-0 invert mb-2" />
               <p className="text-[10px] font-bold text-primary tracking-[0.2em] uppercase">AI VOICE CONCIERGE • SECURE LINE</p>
             </div>
           </div>
@@ -138,7 +140,7 @@ export const VoiceInterface: React.FC = () => {
       )}
 
       {/* Main Grid Layout */}
-      <main className="flex-1 w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-6 min-h-0 p-6">
+      <main className="flex-1 w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 min-h-0 p-6">
 
         {/* Left: Info Panel (Shop Board) - Desktop Only */}
         <section className="hidden md:block col-span-1 h-full min-h-0">
